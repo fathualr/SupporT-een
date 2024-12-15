@@ -27,6 +27,6 @@ class AdminSeeder extends Seeder
             'admin_role' => 'content admin', // Admin 2 sebagai content admin
         ]);
         
-        // Admin::factory()->count(15)->create(); // Menggunakan factory untuk Admin
+        Admin::factory()->count(15)->create(); // Menggunakan factory untuk Admin
     }
 }

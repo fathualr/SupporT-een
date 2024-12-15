@@ -79,19 +79,19 @@ Route::middleware([RoleMiddleware::class . ':pasien'])->group(function () {
             Route::resource('/gambar-diskusi', GambarDiskusiController::class)->only('destroy');
         });
     });
-    // Route::get('/konsultasi', [KonsultasiController::class, 'konsultasi']);
+    Route::get('/konsultasi/{id?}', [KonsultasiController::class, 'konsultasi'])->name('konsultasi.index');
 });
 
 // Tenaga Ahli
-// Route::prefix('tenaga-ahli')->middleware(['auth', RoleMiddleware::class . ':tenaga ahli'])->group(function () {
-//     Route::get('/', [MainController::class, 'tenagaAhli']);
-//     Route::get('/kelola-konten-edukatif', [KontenEdukatifController::class, 'tenagaAhliKontenEdukatif']);
-//     Route::get('/kelola-konten-edukatif/artikel', [KontenEdukatifController::class, 'tenagaAhliKontenArtikel']);
-//     Route::get('/kelola-konten-edukatif/video', [KontenEdukatifController::class, 'tenagaAhliKontenVideo']);
-//     Route::get('/kelola-konten-edukatif/tambah-konten', [KontenEdukatifController::class, 'tenagaAhliCreate']);
-//     Route::get('/percakapan-konsultasi', [KonsultasiController::class, 'tenagaAhliKonsultasi']);
-//     Route::get('/pendapatan', [PendapatanController::class, 'tenagaAhliPendapatan']);
-// });
+Route::prefix('tenaga-ahli')->middleware(['auth', RoleMiddleware::class . ':tenaga ahli'])->group(function () {
+    Route::get('/', [MainController::class, 'tenagaAhli']);
+    Route::get('/kelola-konten-edukatif', [KontenEdukatifController::class, 'tenagaAhliKontenEdukatif']);
+    Route::get('/kelola-konten-edukatif/artikel', [KontenEdukatifController::class, 'tenagaAhliKontenArtikel']);
+    Route::get('/kelola-konten-edukatif/video', [KontenEdukatifController::class, 'tenagaAhliKontenVideo']);
+    Route::get('/kelola-konten-edukatif/tambah-konten', [KontenEdukatifController::class, 'tenagaAhliCreate']);
+    Route::get('/percakapan-konsultasi', [KonsultasiController::class, 'tenagaAhliKonsultasi']);
+    Route::get('/pendapatan', [PendapatanController::class, 'tenagaAhliPendapatan']);
+});
 
 // Admin
 Route::prefix('super-admin')->middleware([RoleMiddleware::class . ':superadmin'])->group(function () {
@@ -104,7 +104,6 @@ Route::prefix('super-admin')->middleware([RoleMiddleware::class . ':superadmin']
     Route::resource('/subscription-user', SubscriptionController::class)->only('index');
     Route::resource('/subscription-transaction', TransaksiLanggananController::class)->only('index', 'show', 'destroy');
     Route::resource('/transaksi', TransaksiController::class)->only('index');
-    // Route::get('/pendapatan', [PendapatanController::class, 'adminPendapatan']);
     Route::resource('/model-chatbot', ChatbotController::class)->only('index');
     Route::post('/model-chatbot', [ChatbotController::class, 'updateChatbotLiteDataset'])->name('chatbotLite.updateDataset');
 });

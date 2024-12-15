@@ -21,6 +21,6 @@ class PasienSeeder extends Seeder
             'deskripsi_diri' => 'Saya adalah pasien dengan keluhan kecemasan tinggi.',
         ]);
         
-        // Pasien::factory()->count(15)->create(); // Menggunakan factory untuk Pasien
+        Pasien::factory()->count(15)->create(); // Menggunakan factory untuk Pasien
     }
 }

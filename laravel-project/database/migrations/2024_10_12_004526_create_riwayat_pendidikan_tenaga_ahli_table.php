@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('riwayat_pendidikan_tenaga_ahli', function (Blueprint $table) {
-        //     $table->id(); // Primary key, ID unik untuk setiap riwayat pendidikan
-        //     $table->unsignedBigInteger('id_tenaga_ahli'); // Foreign key merujuk pada tabel tenaga ahli
-        //     $table->string('keterangan', 255); // Nama institusi pendidikan
+        Schema::create('riwayat_pendidikan_tenaga_ahli', function (Blueprint $table) {
+            $table->id(); // Primary key, ID unik untuk setiap riwayat pendidikan
+            $table->unsignedBigInteger('id_tenaga_ahli'); // Foreign key merujuk pada tabel tenaga ahli
+            $table->string('keterangan', 255); // Nama institusi pendidikan
 
-        //     // Definisi foreign key
-        //     $table->foreign('id_tenaga_ahli')->references('id')->on('tenaga_ahli')->onDelete('cascade');
-        // });
+            // Definisi foreign key
+            $table->foreign('id_tenaga_ahli')->references('id')->on('tenaga_ahli')->onDelete('cascade');
+        });
     }
 
     /**

@@ -421,7 +421,7 @@
     
             <!-- Sosial Media -->
             <div class="lg:col-start-4">
-                <ul class="flex flex-col text-center">
+                <ul class="flex flex-col text-center gap-3">
                     <li>
                         <p class="text-xl font-semibold mb-2">Sosial Media</p>
                         <div class="flex justify-center gap-2">
@@ -430,6 +430,13 @@
                             <a href=""><img src="{{ asset('icons/facebook.png') }}" alt="Facebook" class="h-10 w-10"></a>
                             <a href=""><img src="{{ asset('icons/youtube.png') }}" alt="YouTube" class="h-10 w-10"></a>
                         </div>
+                    </li>
+                    <li class="flex flex-col items-center">
+                        <p class="text-base font-semibold mb-1">Anda seorang tenaga ahli kejiwaan?</p>
+                        <a href="/mitra" class="btn btn-xs flex h-[30px] w-[100px] bg-color-8 text-color-9 text-color-1 hover:bg-color-6 border-color-4">
+                            <img src=" {{ asset('icons/doctor-department.png') }} " alt="" class="h-4 w-4">
+                            Daftar
+                        </a>
                     </li>
                 </ul>
             </div>

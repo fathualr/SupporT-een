@@ -2,7 +2,8 @@
 
 @section('aside')
 <!-- konten sidebar -->
-    <div class="flex flex-col w-full h-full pt-9 px-12 gap-6">
+    <div class="flex flex-col mx-auto w-full h-auto mt-9 px-12 gap-y-6">
+        <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Daftar Aktivitas</h1>
 
         <!-- tombol kustomisasi aktivitas -->
         <a href="/daftar-aktivitas-pribadi/kustomisasi" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
@@ -54,16 +55,17 @@
         <!-- Content Offcanvas -->
         <div class="p-4">
 
-        <div class="flex flex-col w-full h-full gap-6">
+            <div class="flex flex-col mx-auto items-center w-full h-fit gap-6">
+                <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Daftar Aktivitas</h1>
 
             <!-- tombol kustomisasi aktivitas -->
-            <a href="/daftar-aktivitas-pribadi/kustomisasi" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
+            <a href="/daftar-aktivitas-pribadi/kustomisasi" class="btn flex w-full justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
                 <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
                 Kustomisasi Aktivitas
             </a>
             <!-- tombol kustomisasi aktivitas -->
 
-            <h1 class="text-2xl xl:text-4xl font-bold text-color-1">Riwayat Aktivitas</h1>
+            <h1 class="text-2xl xl:text-4xl font-bold text-color-1 text-left w-full">Riwayat Aktivitas</h1>
 
             <div class="w-full h-full max-h-[calc(100vh-220px)] overflow-y-auto overflow-x-hidden">
                 @include('pasien.Components.riwayat_aktivitas')
@@ -83,7 +85,6 @@
         Kembali
     </a>
 
-    <h1 class="font-bold text-3xl my-1">Daftar Aktivitas Pribadi</h1>
     <p class="text-sm">Berikut adalah aktivitas yang telah kamu pilih untuk dilakukan setiap harinya.</p>
 
     <form action="{{ route('aktivitas-pribadi.store') }}" method="POST">

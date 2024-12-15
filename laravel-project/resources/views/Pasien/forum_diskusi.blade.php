@@ -3,12 +3,13 @@
 
 @section('aside')
 
-<div class="flex flex-col mx-auto w-full h-full pt-9 px-8 xl:px-12 gap-6">
+<div class="flex flex-col mx-auto w-full h-auto mt-9 px-12 gap-y-6">
+    <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Forum Diskusi</h1>
     <a href="{{ route('forum-diskusi.create') }}" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
         <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
         Buat Diskusi
     </a>
-    <h1 class="text-4xl font-bold text-color-1 text-start">Diskusi Anda</h1>
+    <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Diskusi Anda</h1>
     <div class="flex flex-col w-full h-full gap-4">
 
         @include('pasien.components.card_list')
@@ -51,8 +52,9 @@
 
         <!-- Content Offcanvas -->
         <div class="p-4">
-        
-            <a href="{{ route('forum-diskusi.create') }}" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
+            <div class="flex flex-col mx-auto items-center w-full h-fit gap-6">
+                <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Forum Diskusi</h1>
+            <a href="{{ route('forum-diskusi.create') }}" class="btn flex w-full justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
                 <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
                 Buat Diskusi
             </a>
@@ -64,7 +66,7 @@
                     @include('pasien.components.card_list')
 
                 </div>
-
+            </div>
         </div>
         <!-- End Content Offcanvas -->
     </div>

@@ -1,9 +1,9 @@
 <!-- Daftar Riwayat Aktivitas -->
-<div class="flex flex-col w-full h-full p-2 gap-4">
+<div class="flex flex-col w-full h-full gap-4">
     
     @foreach ($riwayatAktivitas as $tanggal => $aktivitasHarian)
-        <button class="btn space-y-2 h-20 bg-color-8 rounded-2xl outline outline-1 outline-color-4 p-3"
-            onclick="document.getElementById('riwayat-aktivitas-{{ $tanggal }}').showModal()">
+        <label class="btn space-y-2 h-[50px] bg-color-8 rounded-xl outline outline-1 outline-color-4 px-3"
+            onclick="document.getElementById('riwayat-aktivitas-{{ $tanggal }}').checked = true">
             <div class="flex flex-col justify-between text-left w-full h-full">
                 <p class="text-base font-semibold text-color-1">
                     {{ $aktivitasHarian->count() }} aktivitas diselesaikan
@@ -12,10 +12,11 @@
                     {{ \Carbon\Carbon::parse($tanggal)->translatedFormat('d F Y') }}
                 </p>
             </div>
-        </button>
+        </label>
 
-        <!-- Modal untuk tanggal tertentu -->
-        <dialog id="riwayat-aktivitas-{{ $tanggal }}" class="modal">
+        <!-- Modal untuk waktu tertentu -->
+        <input type="checkbox" id="riwayat-aktivitas-{{ $tanggal }}" class="modal-toggle" />
+        <div class="modal select-none" role="dialog">
             <div class="modal-box bg-color-8">
                 <h3 class="text-lg font-bold">Daftar Aktivitas</h3>
 
@@ -33,14 +34,11 @@
                 </ul>
 
                 <div class="flex justify-center">
-                    <button type="button" class="btn btn-sm text-color-1 bg-color-7 border-0 hover:bg-color-putih" 
-                        onclick="this.closest('dialog').close()">Kembali</button>
+                    <label for="riwayat-aktivitas-{{ $tanggal }}" class="btn btn-sm text-color-1 bg-color-7 border-0 hover:bg-color-putih">Kembali</label>
                 </div>
             </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
-            </form>
-        </dialog>
+            <label class="modal-backdrop" for="riwayat-aktivitas-{{ $tanggal }}">Close</label>
+        </div>
     @endforeach
 
     @if ($riwayatAktivitas->isEmpty())

@@ -44,4 +44,10 @@ class Konsultasi extends Model
     {
         return $this->hasOne(TransaksiKonsultasi::class, 'id_konsultasi');
     }
+
+    // Relasi ke model PesanKonsultasi
+    public function pesanKonsultasi()
+    {
+        return $this->hasOne(PesanKonsultasi::class, 'id_konsultasi');
+    }
 }

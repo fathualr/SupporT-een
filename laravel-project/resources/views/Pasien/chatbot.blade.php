@@ -3,7 +3,8 @@
 @section('aside')
 
     <!-- halaman chatbot -->
-    <div class="flex flex-col mx-auto w-full h-auto pt-9 px-12 lg:block">
+    <div class="flex flex-col mx-auto w-full h-auto mt-9 px-12 gap-y-6">
+        <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Teman Bot</h1>
 
         <div>
             <!-- tombol tambah percakapan -->
@@ -18,7 +19,7 @@
             <!-- Looping percakapan -->
             @foreach ($percakapanList as $percakapan)
                 <button type="button" onclick="window.location='{{ route('chatbot.index', ['id' => $percakapan->id]) }}';" 
-                        class="flex flex-row items-center justify-between lg:h-16 xl:h-20 border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
+                        class="flex flex-row items-center justify-between h-[50px] border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
                     <span class="text-color-1 text-sm xl:text-base font-semibold truncate">
                         {{ $percakapan->label ?? 'Percakapan #' . $percakapan->id }}
                     </span>
@@ -85,20 +86,21 @@
 
         <!-- Content Offcanvas -->
         <div class="p-4">
-            <div>
-                <!-- tombol tambah percakapan -->
-                <a href="/chatbot" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-color-1 mb-4">
-                    <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
-                    Buat percakapan baru
-                </a>
-            </div>
+            
+        <div class="flex flex-col mx-auto items-center w-full h-fit gap-6">
+            <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Teman Bot</h1>
+            <!-- tombol tambah percakapan -->
+            <a href="/chatbot" class="btn flex justify-start w-full bg-color-6 hover:bg-color-5 hover:border-color-3 text-color-1 mb-4">
+                <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
+                Buat percakapan baru
+            </a>
 
             <div class="flex flex-col w-full h-full gap-4 max-h-[calc(100vh-180px)] overflow-y-auto overflow-x-hidden">
 
                 <!-- Looping percakapan -->
                 @foreach ($percakapanList as $percakapan)
                     <button type="button" onclick="window.location='{{ route('chatbot.index', ['id' => $percakapan->id]) }}';" 
-                            class="flex flex-row items-center justify-between lg:h-16 xl:h-20 border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
+                            class="flex flex-row items-center justify-between h-[50px] border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
                         <span class="text-color-1 text-sm xl:text-base font-semibold truncate">
                             {{ $percakapan->label ?? 'Percakapan #' . $percakapan->id }}
                         </span>
@@ -126,6 +128,7 @@
                     </div>
                 @endif
 
+            </div>
             </div>
         </div>
         </div>

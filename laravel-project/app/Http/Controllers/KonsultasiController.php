@@ -29,10 +29,18 @@ class KonsultasiController extends Controller
                 return redirect()->back()->with('error','Tenaga ahli tidak dapat ditemukan.');
             }
         }
+
+        $pasienId = Auth::user()->pasien->id;
+        
+        $riwayatKonsultasi = Konsultasi::with('pesanKonsultasi', 'tenagaAhli')
+            ->where('id_pasien', $pasienId)
+            ->get();
+
         return view('Pasien/konsultasi', [
             "title" => "Konsultasi Online",
             "tenagaAhli" => $tenagaAhli,
             "selectedTenagaAhli" => $selectedTenagaAhli,
+            "riwayatKonsultasi" => $riwayatKonsultasi,
         ]);
     }
     
@@ -46,10 +54,10 @@ class KonsultasiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    // public function index()
+    // {
 
-    }
+    // }
 
     /**
      * Show the form for creating a new resource.

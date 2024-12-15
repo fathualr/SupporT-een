@@ -24,7 +24,7 @@ class AktivitasPribadiController extends Controller
             ->where('id_pasien', $pasienId)
             ->get()
             ->groupBy(function ($item) {
-                return \Carbon\Carbon::parse($item->created_at)->format('Y-m-d');
+                return ($item->created_at);
             });
     
         return view('Pasien/daftar_aktivitas_pribadi', [

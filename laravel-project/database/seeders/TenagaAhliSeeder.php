@@ -25,6 +25,6 @@ class TenagaAhliSeeder extends Seeder
             'tabungan' => 0.00,
         ]);
         
-        // TenagaAhli::factory()->count(15)->create(); // Menggunakan factory untuk Tenaga Ahli
+        TenagaAhli::factory()->count(15)->create(); // Menggunakan factory untuk Tenaga Ahli
     }
 }

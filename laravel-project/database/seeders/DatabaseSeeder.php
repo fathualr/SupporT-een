@@ -18,18 +18,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             AdminSeeder::class,
-            // TenagaAhliSeeder::class,
-            // RiwayatPendidikanTenagaAhliSeeder::class,
+            TenagaAhliSeeder::class,
+            RiwayatPendidikanTenagaAhliSeeder::class,
             PasienSeeder::class,
-            // ChatbotSeeder::class,
             SubscriptionPLanSeeder::class,
             AktivitasPositifSeeder::class,
             KataKunciAktivitasPositifSeeder::class,
-            // KontenEdukatifSeeder::class,
-            // KataKunciKontenSeeder::class,
-            // DiskusiSeeder::class,
-            // GambarDiskusiSeeder::class,
-            // BalasanSeeder::class,
+            KontenEdukatifSeeder::class,
+            KataKunciKontenSeeder::class,
+            DiskusiSeeder::class,
+            GambarDiskusiSeeder::class,
+            BalasanSeeder::class,
         ]);
     }
 }

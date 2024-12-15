@@ -2,7 +2,7 @@
 
 @section('aside')
 
-    <div class="flex flex-col mx-auto items-center w-full h-fit mt-9 px-8 gap-6">
+    <div class="flex flex-col mx-auto items-center w-full h-auto mt-9 px-8 gap-6">
         <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Konten Edukatif</h1>
 
         <!-- Search Bar with Clear Button (X) -->

@@ -2,7 +2,8 @@
 
 @section('aside')
     <!-- halaman jurnal harian -->
-    <div class="flex flex-col mx-auto w-full h-full pt-9 px-12 gap-6 lg:block">
+    <div class="flex flex-col mx-auto w-full h-auto mt-9 px-12 gap-y-6">
+        <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Jurnal Harian</h1>
 
         <!-- tombol tambah jurnal -->
         <a href="{{ route('jurnalHarian.index') }}" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-color-1">
@@ -15,7 +16,7 @@
 
             <!-- Looping jurnal harian -->
             @foreach ($jurnalHarianList as $jurnal)
-                <button type="button" onclick="window.location='{{ route('jurnal-harian.show', $jurnal->id) }}';" 
+                <button type="button" onclick="window.location='{{ route('jurnalHarian.index', $jurnal->id) }}';" 
                         class="flex flex-row items-center justify-between h-[50px] border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
                     <span class="text-color-1 font-semibold truncate">
                         {{ $jurnal->judul ? $jurnal->judul : Str::limit($jurnal->isi, 50, '...') }}
@@ -76,10 +77,11 @@
         <!-- Content Offcanvas -->
         <div class="p-4">
 
-            <div class="flex flex-col mx-auto w-full h-full gap-6">
+            <div class="flex flex-col mx-auto items-center w-full h-fit gap-6">
+                <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Jurnal Harian</h1>
 
                 <!-- tombol tambah jurnal -->
-                <a href="{{ route('jurnalHarian.index') }}" class="btn flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-color-1">
+                <a href="{{ route('jurnalHarian.index') }}" class="btn flex justify-start w-full bg-color-6 hover:bg-color-5 hover:border-color-3 text-color-1">
                     <img src="{{ asset('icons/Plus.svg') }}" alt="Plus">
                     Tulis Jurnal Baru
                 </a>
@@ -90,7 +92,7 @@
                     <!-- Looping jurnal harian -->
                     @foreach ($jurnalHarianList as $jurnal)
 
-                        <button type="button" onclick="window.location='{{ route('jurnal-harian.show', $jurnal->id) }}';" 
+                        <button type="button" onclick="window.location='{{ route('jurnalHarian.index', $jurnal->id) }}';" 
                                 class="flex flex-row items-center justify-between h-[50px] border-[1px] border-color-4 rounded-2xl p-3 gap-2 hover:bg-color-6">
                             <span class="text-color-1 font-semibold truncate">
                                 {{ $jurnal->judul ? $jurnal->judul : Str::limit($jurnal->isi, 50, '...') }}
@@ -147,7 +149,7 @@
         Kembali
     </a>
     <!-- Jurnal -->
-    <div class=" bg-white max-w-7xl rounded-2xl max-h-full w-full h-full py-4 mb-10">
+    <div class="bg-white max-w-7xl rounded-2xl w-full h-full mb-10 p-8">
 
         @if($selectedJurnal)
         
@@ -166,7 +168,7 @@
             </div>
 
             <!-- form jurnal harian -->
-            <form id="text-form" action="{{ route('jurnal-harian.update', $selectedJurnal->id) }}" method="POST" class="flex flex-col max-w-7xl w-full h-full p-8 shadow-lg relative">
+            <form id="text-form" action="{{ route('jurnal-harian.update', $selectedJurnal->id) }}" method="POST" class="flex flex-col max-w-7xl w-full h-full gap-y-4 relative">
                 @csrf
                 @method('PATCH')
                 
@@ -225,7 +227,7 @@
         @else
 
             <!-- form jurnal harian -->
-            <form id="text-form" action="{{ route('jurnal-harian.store') }}" method="POST" class="flex flex-col max-w-7xl bg-white w-full h-full gap-y-4 p-8 rounded-2xl shadow-lg relative">
+            <form id="text-form" action="{{ route('jurnal-harian.store') }}" method="POST" class="flex flex-col max-w-7xl w-full h-full gap-y-4 relative">
                 @csrf
                 
                 <!-- judul -->
@@ -249,7 +251,7 @@
                 @enderror
 
                 <!-- tombol simpan -->
-                <div class="flex justify-center">
+                <div class="flex justify-center w-full">
                     <button type="submit" class="btn border-0 bg-color-3 text-white">
                         Simpan
                     </button>

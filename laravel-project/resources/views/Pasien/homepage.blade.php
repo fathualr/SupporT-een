@@ -108,10 +108,12 @@
             <p class="font-semibold xl:text-base">Forum Diskusi</p>
         </a>
     </div>
-        {{-- <a href="konsultasi" class="flex flex-col justify-center items-center bg-color-8 border border-color-4 rounded-xl min-h-[250px]">
-            <img src=" {{ asset('icons/consultation.svg') }} " alt="">
-        <p class="font-semibold">Konsultasi</p>
-        </a> --}}
+    <div>
+        <a href="konsultasi" class="flex flex-col justify-center items-center bg-color-8 border border-color-4 rounded-xl size-36 sm:size-44 xl:size-56">
+            <img class="size-24 xl:size-[9.375rem]" src=" {{ asset('icons/consultation.svg') }} " alt="">
+            <p class="font-semibold xl:text-base">Konsultasi</p>
+        </a>
+    </div>
 </div>
 <!-- fitur -->
 
