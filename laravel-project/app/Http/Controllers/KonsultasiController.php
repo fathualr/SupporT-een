@@ -44,6 +44,13 @@ class KonsultasiController extends Controller
         ]);
     }
     
+    public function pasienKonsultasi()
+    {
+        return view('Pasien/percakapan_konsultasi', [
+            "title" => "Percakapan"
+        ]);
+    }
+    
     public function tenagaAhliKonsultasi()
     {
         return view('TenagaAhli/percakapan_konsultasi', [

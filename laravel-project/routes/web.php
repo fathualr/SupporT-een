@@ -80,6 +80,7 @@ Route::middleware([RoleMiddleware::class . ':pasien'])->group(function () {
         });
     });
     Route::get('/konsultasi/{id?}', [KonsultasiController::class, 'konsultasi'])->name('konsultasi.index');
+    Route::get('/konsultas-percakapan', [KonsultasiController::class, 'pasienKonsultasi']);
 });
 
 // Tenaga Ahli
