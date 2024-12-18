@@ -44,7 +44,6 @@ Route::post('authenticate', [AuthController::class, 'authenticate'])->name('auth
 Route::post('registration', [AuthController::class, 'registration'])->name('registration');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// profile
 Route::middleware([GuestOrPasienMiddleware::class, VerifiedPatientMiddleware::class])->group(function () {
     Route::get('/', [MainController::class, 'index']);
     Route::get('/konten-edukatif/{id?}', [KontenEdukatifController::class, 'kontenEdukatif'])->name('kontenEdukatif');
@@ -79,8 +78,10 @@ Route::middleware([RoleMiddleware::class . ':pasien'])->group(function () {
             Route::resource('/gambar-diskusi', GambarDiskusiController::class)->only('destroy');
         });
     });
+    Route::resource('/konsultasi', KonsultasiController::class)->only('store','destroy');
     Route::get('/konsultasi/{id?}', [KonsultasiController::class, 'konsultasi'])->name('konsultasi.index');
-    Route::get('/konsultas-percakapan', [KonsultasiController::class, 'pasienKonsultasi']);
+    Route::get('/konsultasi/chat/{id_konsultasi}', [KonsultasiController::class, 'pasienKonsultasi'])->name('chat.index');
+    Route::post('/konsultasi/chat/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');
 });
 
 // Tenaga Ahli
@@ -90,7 +91,10 @@ Route::prefix('tenaga-ahli')->middleware(['auth', RoleMiddleware::class . ':tena
     Route::get('/kelola-konten-edukatif/artikel', [KontenEdukatifController::class, 'tenagaAhliKontenArtikel']);
     Route::get('/kelola-konten-edukatif/video', [KontenEdukatifController::class, 'tenagaAhliKontenVideo']);
     Route::get('/kelola-konten-edukatif/tambah-konten', [KontenEdukatifController::class, 'tenagaAhliCreate']);
-    Route::get('/percakapan-konsultasi', [KonsultasiController::class, 'tenagaAhliKonsultasi']);
+    Route::patch('/{id}/update-status', [TenagaAhliController::class, 'updateStatus'])->name('tenagaAhli.updateStatus');
+    Route::get('/percakapan-konsultasi/{id?}', [KonsultasiController::class, 'tenagaAhliKonsultasi'])->name('tenagaAhliChat.index');
+    Route::post('/percakapan-konsultasi/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');
+    Route::post('/percakapan-konsultasi/{id_konsultasi}/store', [KonsultasiController::class, 'storePesanHasilKonsultasi'])->name('percakapan-konsultasi.pesan');
     Route::get('/pendapatan', [PendapatanController::class, 'tenagaAhliPendapatan']);
 });
 

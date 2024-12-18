@@ -24,16 +24,16 @@
 
         @if($selectedTenagaAhli)
 
-            <a href="/konsultasi" class="btn btn-sm bg-color-3 text-color-putih hover:bg-opacity-75 border-0 mb-3">
-                <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
-                Kembali
-            </a>
+        <a href="/konsultasi" class="btn btn-sm mb-3 bg-color-4 text-color-putih hover:bg-color-2 border-0 w-fit">
+            <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
+            Kembali
+        </a>
             <div class="card h-fit card-compact bg-color-6">
                 <div class="flex flex-row gap-5 p-5">
                     <figure class="flex-none">
                         <img
                         class="w-[250px] h-[250px] rounded-2xl object-cover"
-                        src="{{ asset('storage/'.$selectedTenagaAhli->user->foto_profil) }}"
+                        src="{{ $selectedTenagaAhli->user->foto_profil ? asset('storage/'.$selectedTenagaAhli->user->foto_profil) : asset('images/dummy.png') }}"
                         alt="Profile Image" />
                     </figure>
                     <div class="flex flex-col justify-around w-full">
@@ -80,9 +80,17 @@
                     <!-- Tombol -->
                     <div class="mt-4">
                         @if($selectedTenagaAhli->is_available)
-                        <button type="button" onclick="initiateConsultation({{ $selectedTenagaAhli->id }})" class="btn btn-lg bg-color-3 border-[1px] border-color-5 text-white w-full">Chat Sekarang</button>
+                            <form action="{{ route('konsultasi.store') }}" method="POST" onclick="event.stopPropagation();">
+                                @csrf
+                                <input type="hidden" name="id_tenaga_ahli" value="{{ $selectedTenagaAhli->id }}">
+                                <button type="submit" class="btn btn-lg bg-color-3 border-[1px] border-color-5 text-white w-full">
+                                    Chat Sekarang
+                                </button>
+                            </form>
                         @else
-                        <button class="btn btn-lg cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">Offline</button>
+                            <button class="btn btn-lg cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">
+                                Offline
+                            </button>
                         @endif
                     </div>
                 </div>
@@ -90,7 +98,7 @@
 
         @else
 
-            <a href="/" class="btn btn-sm bg-color-3 text-color-putih hover:bg-opacity-75 border-0 mb-3">
+            <a href="/" class="btn btn-sm mb-3 bg-color-4 text-color-putih hover:bg-color-2 border-0 w-fit">
                 <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
                 Kembali
             </a>
@@ -101,7 +109,7 @@
                     <figure class="flex-none">
                         <img
                         class="w-[150px] h-[150px] rounded-2xl"
-                        src="{{ asset('storage/'.$ahli->user->foto_profil) }}"
+                        src="{{ $ahli->user->foto_profil ? asset('storage/'.$ahli->user->foto_profil) : asset('images/dummy.png') }}"
                         alt="Profile Image" />
                     </figure>
                     <div class="flex-1 card-body justify-between">
@@ -111,9 +119,18 @@
                             <p class="font-semibold text-color-1">Rp.{{ number_format($ahli->biaya_konsultasi, 0, ',', '.') }}</p>
 
                             @if($ahli->is_available)
-                                <button onclick="event.stopPropagation(); initiateConsultation({{ $ahli->id }})" type="button" class="btn btn-sm bg-color-3 border-[1px] border-color-5 text-white w-full">Chat</button>
+                                <form action="{{ route('konsultasi.store') }}" method="POST" onclick="event.stopPropagation();">
+                                    @csrf
+                                    <input type="hidden" name="id_tenaga_ahli" value="{{ $ahli->id }}">
+                                    <button type="submit" class="btn btn-sm bg-color-3 border-[1px] border-color-5 text-white w-full">
+                                        Chat
+                                    </button>
+                                </form>
                             @else
-                                <button onclick="event.stopPropagation();" type="button" class="btn btn-sm cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">Offline</button>
+                                <button onclick="event.stopPropagation();" type="button" 
+                                        class="btn btn-sm cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">
+                                    Offline
+                                </button>
                             @endif
 
                         </div>

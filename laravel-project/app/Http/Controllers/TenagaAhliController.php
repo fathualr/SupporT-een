@@ -15,6 +15,23 @@ use Illuminate\Validation\Rule;
 
 class TenagaAhliController extends Controller
 {
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'is_available' => 'required|boolean',
+        ]);
+
+        $tenagaAhli = TenagaAhli::find($id);
+        if (!$tenagaAhli) {
+            return response()->json(['message' => 'Data Tenaga Ahli tidak ditemukan.'], 404);
+        }
+        $tenagaAhli->update([
+            'is_available' => $validated['is_available'],
+        ]);
+    
+        return response()->json(['message' => 'Status berhasil diperbarui.']);
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pesan_konsultasi', function (Blueprint $table) {
             $table->id(); // Primary key, ID unik untuk setiap pesan
-            $table->unsignedBigInteger('id_konsultasi'); // Foreign key untuk merujuk pada sesi konsultasi
+            $table->uuid('id_konsultasi'); // Foreign key untuk merujuk pada sesi konsultasi
             $table->enum('pengirim', ['tenaga ahli', 'pasien']); // Pihak yang mengirimkan pesan
             $table->string('pesan', 255); // Isi text yang dikirim sebagai pesan
             $table->string('pesan_gambar', 255)->nullable(); // Gambar yang dikirim dalam pesan

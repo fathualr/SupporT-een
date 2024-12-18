@@ -67,5 +67,9 @@ class Pasien extends Model
         return $this->hasMany(ChatbotLog::class, 'id_pasien');
     }
     
+    public function konsultasi()
+    {
+        return $this->hasMany(Konsultasi::class, 'id_pasien');
+    }
     public $timestamps = false;
 }

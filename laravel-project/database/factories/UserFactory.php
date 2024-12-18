@@ -20,7 +20,7 @@ class UserFactory extends Factory
             'nama' => $this->faker->name(),
             'jenis_kelamin' => $this->faker->randomElement(['laki laki', 'perempuan']),
             'tanggal_lahir' => $this->faker->date(),
-            'foto_profil' => 'image/dummy.png',
+            'foto_profil' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];

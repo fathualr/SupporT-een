@@ -105,12 +105,16 @@
                     <!-- Dropdown menu -->
                     <div id="dropdown" class="z-10 hidden bg-color-6 divide-y divide-gray-100 border border-color-6 rounded-lg shadow w-full max-w-28 md:max-w-40 lg:max-w-[15.625rem]">
                         <ul class="text-sm text-gray-700 font-medium" aria-labelledby="dropdownDefaultButton">
-                            <li>
-                                <!-- button profile -->
-                                <a href="/profile" class="block px-4 py-2  hover:bg-gray-100 hover:rounded-lg w-full text-center">
-                                    Profile
-                                </a>
-                            </li>
+                            
+                            @if (Auth::user()->role === 'pasien')
+                                <li>
+                                    <!-- button profile -->
+                                    <a href="/profile" class="block px-4 py-2  hover:bg-gray-100 hover:rounded-lg w-full text-center">
+                                        Profile
+                                    </a>
+                                </li>
+                            @endif
+
                             <li>
                                 <!-- button logout -->
                                 <form class="" action="{{ route('logout') }}" method="POST">

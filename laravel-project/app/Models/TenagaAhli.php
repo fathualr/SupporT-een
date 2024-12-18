@@ -25,6 +25,7 @@ class TenagaAhli extends Model
         'lokasi_praktik',
         'biaya_konsultasi',
         'tabungan',
+        'is_available'
     ];
 
     /**
@@ -43,6 +44,11 @@ class TenagaAhli extends Model
     public function riwayatPendidikan()
     {
         return $this->hasMany(RiwayatPendidikanTenagaAhli::class, 'id_tenaga_ahli');
+    }
+    
+    public function konsultasi()
+    {
+        return $this->hasMany(Konsultasi::class, 'id_pasien');
     }
     /**
      * Casting attributes to native types.

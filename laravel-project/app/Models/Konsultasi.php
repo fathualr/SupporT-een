@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Konsultasi extends Model
 {
     use HasFactory;
-
-    // Tentukan nama tabel jika berbeda dari penamaan konvensional
     protected $table = 'konsultasi';
+    public $incrementing = false; // Karena menggunakan UUID
+    protected $keyType = 'string'; // Tipe data primary key adalah string
 
     // Kolom-kolom yang bisa diisi secara massal
     protected $fillable = [
@@ -26,6 +27,16 @@ class Konsultasi extends Model
         'started_at' => 'datetime',
         'ends_at' => 'datetime',
     ];
+
+    // Event untuk membuat UUID secara otomatis saat model dibuat
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->{$model->getKeyName()} = (string) Str::uuid();
+        });
+    }
 
     // Relasi dengan model TenagaAhli
     public function tenagaAhli()
@@ -48,6 +59,6 @@ class Konsultasi extends Model
     // Relasi ke model PesanKonsultasi
     public function pesanKonsultasi()
     {
-        return $this->hasOne(PesanKonsultasi::class, 'id_konsultasi');
+        return $this->hasMany(PesanKonsultasi::class, 'id_konsultasi');
     }
 }

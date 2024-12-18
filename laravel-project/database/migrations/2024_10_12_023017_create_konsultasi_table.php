@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('konsultasi', function (Blueprint $table) {
-            $table->id(); // Primary key, ID unik untuk setiap konsultasi
+            $table->uuid('id')->primary(); // Primary key, ID unik untuk setiap konsultasi
             $table->unsignedBigInteger('id_tenaga_ahli')->nullable(); // Foreign key untuk merujuk pada tenaga ahli
             $table->unsignedBigInteger('id_pasien')->nullable(); // Foreign key untuk merujuk pada pasien
             $table->string('pesan_tenaga_ahli', 255)->nullable(); // Pesan terakhir dari tenaga ahli
