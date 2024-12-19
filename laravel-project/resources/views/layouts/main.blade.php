@@ -156,26 +156,24 @@
     <footer class="text-color-8">
     <div class="grid grid-cols-1 bg-color-1 min-h-96 h-fit py-7 px-6 gap-6 lg:grid-cols-4 lg:pt-12 lg:gap-4 xl:px-20">
         <!-- Tentang Aplikasi -->
-        <div>
-            <nav class="pr-0 text-center lg:text-start">
-                <p class="text-xl font-semibold mb-4">Tentang Aplikasi</p>
-                <div class="grid grid-cols-1 gap-y-4 lg:text-sm">
-                    <div>
-                        <h3 class="font-medium mb-1">Email</h3>
-                        <p class="text-gray-300">pblif19@gmail.com</p>
-                    </div>
-                    <div>
-                        <h3 class="font-medium mb-1">Alamat</h3>
-                        <p class="text-gray-300">Jl. Ahmad Yani Batam Kota, Kota Batam, Kepulauan Riau, Indonesia</p>
-                    </div>
+        <nav class="pr-0 text-center lg:text-start">
+            <p class="text-xl font-semibold mb-4">Tentang Aplikasi</p>
+            <div class="grid grid-cols-1 gap-y-4 lg:text-sm">
+                <div>
+                    <h3 class="font-medium mb-1">Email</h3>
+                    <p class="text-gray-300">pblif19@gmail.com</p>
                 </div>
-            </nav>
-        </div>
+                <div>
+                    <h3 class="font-medium mb-1">Alamat</h3>
+                    <p class="text-gray-300">Jl. Ahmad Yani Batam Kota, Kota Batam, Kepulauan Riau, Indonesia</p>
+                </div>
+            </div>
+        </nav>
 
         <!-- Pintasan Aplikasi -->
-        <div>
-            <nav class="text-center lg:text-start">
-                <p class="text-xl font-semibold mb-4">Pintasan Aplikasi</p>
+        <nav class="text-center lg:text-start">
+            <p class="text-xl font-semibold mb-4">Pintasan Aplikasi</p>
+                @if (!Auth::check() || Auth::user()->role === 'pasien')
                 <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:text-sm">
                     <div class="flex flex-col gap-4">
                         <a href="/chatbot" class="link link-hover hover:text-white text-gray-300">Chatbot</a>
@@ -187,8 +185,16 @@
                         <a href="/forum" class="link link-hover hover:text-white text-gray-300">Forum Diskusi</a>
                     </div>
                 </div>
-            </nav>
-        </div>
+                @else
+                <div class="grid gap-4 lg:text-sm">
+                    <div class="flex flex-col gap-4">
+                        <a href="/tenaga-ahli/kelola-konten-edukatif" class="link link-hover hover:text-white text-gray-300">Kelola Konten Edukatif</a>
+                        <a href="/tenaga-ahli/percakapan-konsultasi" class="link link-hover hover:text-white text-gray-300">Manajemen Konsultasi</a>
+                        <a href="/tenaga-ahli/pendapatan" class="link link-hover hover:text-white text-gray-300">Pendapatan</a>
+                    </div>
+                </div>
+                @endif
+        </nav>
 
         <!-- Sosial Media -->
         <div class="lg:col-start-4">
@@ -196,10 +202,10 @@
                 <li>
                     <p class="text-xl font-semibold mb-2">Sosial Media</p>
                     <div class="flex justify-center gap-2">
-                        <a href=""><img src="{{ asset('icons/instagram.png') }}" alt="Instagram" class="h-10 w-10"></a>
-                        <a href=""><img src="{{ asset('icons/twitter.png') }}" alt="Twitter" class="h-10 w-10"></a>
-                        <a href=""><img src="{{ asset('icons/facebook.png') }}" alt="Facebook" class="h-10 w-10"></a>
-                        <a href=""><img src="{{ asset('icons/youtube.png') }}" alt="YouTube" class="h-10 w-10"></a>
+                        <a href="https://www.instagram.com/" target="_blank"><img src="{{ asset('icons/instagram.png') }}" alt="Instagram" class="h-10 w-10"></a>
+                        <a href="https://www.x.com/" target="_blank"><img src="{{ asset('icons/twitter.png') }}" alt="Twitter" class="h-10 w-10"></a>
+                        <a href="https://www.facebook.com/" target="_blank"><img src="{{ asset('icons/facebook.png') }}" alt="Facebook" class="h-10 w-10"></a>
+                        <a href="https://www.youtube.com/" target="_blank"><img src="{{ asset('icons/youtube.png') }}" alt="YouTube" class="h-10 w-10"></a>
                     </div>
                 </li>
                 <li class="flex flex-col items-center">
@@ -337,22 +343,28 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const loader = document.getElementById('global-loader');
-
+    
             function showLoader() {
                 if (loader) loader.style.display = 'flex';
             }
-
+    
             // Tambahkan event listener untuk semua link
             const links = document.querySelectorAll('a');
             links.forEach(link => {
                 link.addEventListener('click', function (e) {
                     const href = link.getAttribute('href');
-                    if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                    const target = link.getAttribute('target'); // Ambil atribut target
+    
+                    // Tampilkan loader jika:
+                    // - href ada
+                    // - href bukan anchor (#) atau JavaScript
+                    // - link tidak memiliki atribut target
+                    if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !target) {
                         showLoader();
                     }
                 });
             });
-
+    
             // Tambahkan event listener untuk semua form
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {
@@ -362,5 +374,6 @@
             });
         });
     </script>
+    
 </body>
 </html>

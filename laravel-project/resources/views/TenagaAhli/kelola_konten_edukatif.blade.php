@@ -2,128 +2,227 @@
 
 @section('aside')
 
-<div class="flex flex-col mx-auto items-center w-full h-full pt-9 px-[50px] gap-6">
-    <a href="/tenaga-ahli/kelola-konten-edukatif/tambah-konten" class="btn w-full flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
-        <img src="{{ asset('icons/Plus.svg') }}" alt="">
-        Buat Konten
-    </a>
+    <div class="flex flex-col mx-auto items-center w-full h-auto mt-9 px-8 gap-6">
+        <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Kelola Konten Edukatif</h1>
 
-    <h1 class="text-4xl font-bold text-color-1">Kelola Konten Edukatif</h1>
-    
-    <div class="flex flex-col w-full h-full gap-4">
+        <a href="{{ route('kelola-konten-edukatif.create') }}" class="btn w-full flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
+            <img src="{{ asset('icons/Plus.svg') }}" alt="">
+            Buat Konten
+        </a>
 
-        @include('TenagaAhli.Components.card_list')
+        <div class="divider m-0"></div>
+
+        <div class="flex flex-col w-full h-full gap-4">
+
+            @include('TenagaAhli.Components.card_list')
+
+            <div class="divider m-0"></div>
+
+            <div class="mb-3 flex justify-center">
+                <!-- Pagination container -->
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                    <!-- Previous Page Button -->
+                    @if ($kontenList->onFirstPage())
+                        <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-2 bg-color-6 border border-color-4 cursor-not-allowed">
+                            Previous
+                        </span>
+                    @else
+                        <a href="{{ $kontenList->previousPageUrl() . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-3 bg-color-6 border border-color-4 rounded-l-md hover:bg-color-5">
+                            Previous
+                        </a>
+                    @endif
+            
+                    <!-- Page Numbers -->
+                    @foreach ($kontenList->links()->elements[0] as $page => $url)
+                        <a href="{{ $url . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium 
+                            {{ $page == $kontenList->currentPage() ? 'text-color-1 bg-color-3 border-color-3' : 'text-color-2 bg-color-6 border-color-4 hover:bg-color-5' }} border">
+                            {{ $page }}
+                        </a>
+                    @endforeach
+            
+                    <!-- Next Page Button -->
+                    @if ($kontenList->hasMorePages())
+                        <a href="{{ $kontenList->nextPageUrl() . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-3 bg-color-6 border border-color-4 rounded-r-md hover:bg-color-5">
+                            Next
+                        </a>
+                    @else
+                        <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-2 bg-color-6 border border-color-4 cursor-not-allowed">
+                            Next
+                        </span>
+                    @endif
+                </nav>
+            </div>         
+            
+        </div>
 
     </div>
-</div>
 
 @endsection
 
 @section('main')
+<!-- offcanvas -->
+<div 
+        id="hs-offcanvas-example" 
+        class="hs-overlay hidden fixed inset-y-0 left-0 transform -translate-x-full transition-all duration-500 ease-in-out z-[80] bg-white shadow-lg max-w-sm w-full lg:hidden" 
+        role="dialog" 
+        tabindex="-1" 
+        aria-labelledby="hs-offcanvas-example-label">
+        
+        <!-- Header Offcanvas -->
+        <div class="flex justify-between items-center py-3 px-4 border-b">
+            <!-- logo -->
+            <a href="{{ Auth::check() && Auth::user()->role === 'tenaga ahli' ? '/tenaga-ahli' : '/' }}" class="flex flex-row items-center">
+                <img class="size-[1.875rem] me-0.5 md:size-12 xl:size-[3.125rem] md:me-2 xl:me-[0.938rem]" src=" {{ asset('images/logo-dark-blue.svg') }} " alt="SupporT-een Logo">
+                <span class="my-auto text-xs md:text-2xl xl:text-[2rem]">SupporT-een</span>
+            </a>
 
-    @if ($tipe === 'article')
-    <!-- Bagian Artikel -->
+            <!-- tombol close -->
+            <button 
+                type="button" 
+                class="inline-flex justify-center items-center rounded-full border bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200" 
+                aria-label="Close" 
+                data-hs-overlay="#hs-offcanvas-example">
+                <span class="sr-only">Close</span>
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content Offcanvas -->
+        <div class="p-4">
+
+        <div class="flex flex-col mx-auto items-center w-full h-fit gap-6">
+            <h1 class="text-2xl xl:text-4xl font-bold text-color-1 w-full">Kelola Konten Edukatif</h1>
+
+            <a href="{{ route('kelola-konten-edukatif.create') }}" class="btn w-full flex justify-start bg-color-6 hover:bg-color-5 hover:border-color-3 text-base">
+                <img src="{{ asset('icons/Plus.svg') }}" alt="">
+                Buat Konten
+            </a>
+
+            <div class="divider m-0"></div>
+
+            <div class="flex flex-col w-full h-full gap-4 max-h-[calc(100vh-200px)] overflow-y-auto overflow-x-hidden">
+
+                @include('TenagaAhli.Components.card_list')
+    
+                <div class="divider m-0"></div>
+    
+                <div class="mb-3 flex justify-center">
+                    <!-- Pagination container -->
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                        <!-- Previous Page Button -->
+                        @if ($kontenList->onFirstPage())
+                            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-2 bg-color-6 border border-color-4 cursor-not-allowed">
+                                Previous
+                            </span>
+                        @else
+                            <a href="{{ $kontenList->previousPageUrl() . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-3 bg-color-6 border border-color-4 rounded-l-md hover:bg-color-5">
+                                Previous
+                            </a>
+                        @endif
+                
+                        <!-- Page Numbers -->
+                        @foreach ($kontenList->links()->elements[0] as $page => $url)
+                            <a href="{{ $url . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium 
+                                {{ $page == $kontenList->currentPage() ? 'text-color-1 bg-color-3 border-color-3' : 'text-color-2 bg-color-6 border-color-4 hover:bg-color-5' }} border">
+                                {{ $page }}
+                            </a>
+                        @endforeach
+                
+                        <!-- Next Page Button -->
+                        @if ($kontenList->hasMorePages())
+                            <a href="{{ $kontenList->nextPageUrl() . (request()->search ? '&search=' . request()->search : '') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-3 bg-color-6 border border-color-4 rounded-r-md hover:bg-color-5">
+                                Next
+                            </a>
+                        @else
+                            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-color-2 bg-color-6 border border-color-4 cursor-not-allowed">
+                                Next
+                            </span>
+                        @endif
+                    </nav>
+                </div>        
+                
+            </div>
+
+    </div>
+
+        </div>
+        <!-- End Content Offcanvas -->
+    </div>
+    <!-- End Offcanvas -->
+
+    <!-- view konten edukatif -->
     <div class="flex flex-col w-full h-full">
-        <div class=" bg-color-8 p-8 border-[1px] border-color-4 rounded-2xl">
+        @if ($selectedKonten)
+
+            @if ($selectedKonten->tipe === 'artikel')
             
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img class="w-16 h-16 rounded-full mr-4" src=" {{ asset('images/jogging.png') }} " alt="Album" />
-                    <div class="flex flex-col">
-                        <span class="text-xl text-color-1 font-semibold">Dr. Mirza</span>
-                        <span class="text-color-2 font-semibold">Author</span>
+                <a href="{{ route('kelola-konten-edukatif.index') }}" class="btn btn-sm mb-3 bg-color-4 text-color-putih hover:bg-color-2 border-0 w-fit">
+                    <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
+                    Kembali
+                </a>
+                
+                <!-- card artikel -->
+                <div class="bg-color-8 p-8 border-[1px] border-color-4 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img class="size-12 rounded-full mr-4" src="{{ $selectedKonten->user->foto_profil ? asset('storage/' . $selectedKonten->user->foto_profil) : asset('images/dummy.png') }}" alt="Album" />
+                            <div class="flex flex-col">
+                                <span class="text-base text-color-1 font-semibold">{{ $selectedKonten->user->nama }}</span>
+                                <span class="text-color-2 text-base">{{ $selectedKonten->user->role }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5 md:gap-2">
+                        <h1 class="text-base md:text-2xl xl:text-3xl font-bold text-color-1 mt-4">{{ $selectedKonten->judul }}</h1>
+                        <span class="text-color-2 text-sm md:text-base text-center">{{ \Carbon\Carbon::parse($selectedKonten->created_at)->format('d F Y, H:i:s') }}</span>
+                        <img class="rounded-2xl object-cover" src="{{ asset('storage/' . $selectedKonten->thumbnail) }}" alt="ilustrasi artikel">
+                        <p class="text-color-1 text-justify text-xs lg:text-base md:text-base">
+                            {{ $selectedKonten->isi_artikel }}
+                        </p>
                     </div>
                 </div>
-                <div class="justify-self-end">
-                <details class="dropdown dropdown-bottom dropdown-left">
-                    <summary class="btn btn-ghost">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        class="inline-block h-5 w-5 stroke-current">
-                        <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
-                    </svg>
-                    </summary>
-                    <ul class="menu dropdown-content bg-color-8 rounded-box z-[1] w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
-                        <li><a>Item 2</a></li>
-                    </ul>
-                </details>
+
+            @elseif ($selectedKonten->tipe === 'video')
+            
+                <a href="{{ route('kelola-konten-edukatif.index') }}" class="btn btn-sm mb-3 bg-color-4 text-color-putih hover:bg-color-2 border-0 w-fit">
+                    <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
+                    Kembali
+                </a>
+
+                <div class="bg-color-8 p-8 border-[1px] border-color-4 rounded-2xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img class="size-12 rounded-full mr-4" src="{{ $selectedKonten->user->foto_profil ? asset('storage/' . $selectedKonten->user->foto_profil) : asset('images/dummy.png') }}" alt="Album" />
+                            <div class="flex flex-col">
+                                <span class="text-base text-color-1 font-semibold">{{ $selectedKonten->user->nama }}</span>
+                                <span class="text-color-2 text-base">{{ $selectedKonten->user->role }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5 md:gap-2">
+                        <h1 class="text-base md:text-2xl xl:text-3xl font-bold text-color-1 mt-4">{{ $selectedKonten->judul }}</h1>
+                        <span class="text-color-2 text-sm md:text-base text-center">{{ \Carbon\Carbon::parse($selectedKonten->created_at)->format('d F Y, H:i:s') }}</span>
+                        <iframe class="w-full aspect-video rounded-lg shadow-lg" src="{!! empty($selectedKonten->link_youtube) ? 'https://www.youtube.com/embed/' : $selectedKonten->link_youtube !!}"></iframe>
+                    </div>
+                </div>
+
+            @endif
+        @else
+        
+            <a href="/tenaga-ahli" class="btn btn-sm mb-3 bg-color-4 text-color-putih hover:bg-color-2 border-0 w-fit">
+                <img class="w-6 h-6" src="{{ asset("icons/back.svg")}}" alt="">
+                Kembali
+            </a>
+
+            <!-- Default Message When No Content Selected -->
+            <div class="bg-color-8 h-full p-8 border-[1px] border-color-4 rounded-2xl">
+                <div class="flex justify-center items-center w-full h-full">
+                    Tidak ada konten yang dipilih.
                 </div>
             </div>
-            <div class="flex flex-col gap-4 pl-20">
-                <h1 class="text-3xl font-bold text-color-1">New Study Reveals Daily Weeks Can Significantly Improve Mental Health</h1>
-                <span class="text-color-2 text-center">23 September 2024</span>
-                <img class="aspect-video rounded-2xl" src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" alt="ilustrasi artikel">
-                <p class="text-color-1 text-base">Baru-baru ini, sebuah studi baru mengungkapkan bahwa aktivitas sederhana seperti berjalan kaki setiap hari memiliki dampak yang
-                    signifikan terhadap kesehatan mental seseorang. Di tengah meningkatnya perhatian global terhadap kesehatan mental, terutama setelah
-                    pandemi COVID-19, temuan ini menegaskan pentingnya aktivitas fisik dalam menjaga kesejahteraan emosional dan psikologis.</p>
-                <h2 class="text-xl font-semibold text-color-1">Pentingnya Berjalan Kaki untuk Kesehatan Mental</h2>
-                <p class="text-color-1 text-base">Menurut studi yang dipublikasikan oleh para peneliti dari universitas terkemuka, berjalan kaki selama 30 menit hingga satu jam setiap
-                    hari dapat secara drastis mengurangi tingkat stres, kecemasan, dan depresi. Aktivitas fisik ringan seperti berjalan meningkatkan pelepasan
-                    endorfin—zat kimia di otak yang dikenal sebagai "hormon kebahagiaan." Ini membantu menstabilkan suasana hati dan mengurangi gejala gangguan
-                    mental seperti kecemasan atau depresi. Selain itu, berjalan di luar ruangan, terutama di area hijau seperti taman atau hutan, juga memberikan
-                    efek relaksasi tambahan. Alam membantu menenangkan pikiran, memungkinkan seseorang untuk mengalihkan perhatian dari masalah sehari-hari dan
-                    memberikan rasa kebebasan.</p>
-                <h2 class="text-xl font-semibold text-color-1">Dampak Jangka Panjang</h2>
-                <p class="text-color-1 text-base">Peneliti juga menemukan bahwa manfaat kesehatan mental dari berjalan kaki bukan hanya bersifat jangka pendek. Dengan berjalan setiap hari,
-                    seseorang dapat membangun kebiasaan positif yang membantu menjaga kesehatan mental dalam jangka panjang. Bahkan bagi mereka yang menderita 
-                    gangguan mental serius, berjalan kaki bisa menjadi pelengkap yang efektif dalam proses terapi.</p>
-                <h2 class="text-xl font-semibold text-color-1">Kesimpulan</h2>
-                <p class="text-color-1 text-base">Penelitian baru ini menyoroti bagaimana aktivitas sederhana seperti berjalan kaki setiap hari dapat memberikan dampak besar bagi kesehatan 
-                    mental. Di tengah tekanan hidup modern dan tantangan mental yang semakin meningkat, terutama setelah masa pandemi, berjalan kaki terbukti 
-                    menjadi solusi yang efektif dan mudah dilakukan untuk menjaga kesehatan mental. Aktivitas ini bukan hanya membantu mengurangi stres, kecemasan, 
-                    dan depresi dalam jangka pendek, tetapi juga berkontribusi pada stabilitas emosional dalam jangka panjang.</p>
-                <p class="text-color-1 text-base">
-                    Dengan berjalan kaki secara rutin, kita dapat meningkatkan kualitas hidup secara keseluruhan. Pelepasan endorfin yang dihasilkan oleh aktivitas fisik 
-                    ini dapat membantu mengatur suasana hati, meningkatkan kesejahteraan emosional, dan bahkan mencegah gejala gangguan mental yang lebih serius. Selain itu, 
-                    berjalan di alam terbuka memperkaya pengalaman psikologis dengan memberikan perasaan relaksasi dan keterhubungan dengan alam, yang semakin menambah efek positif 
-                    bagi pikiran.
-                </p>
-            </div>
-
-        </div>
+        @endif
     </div>
-
-    @elseif ($tipe === 'video')
-    <!-- Bagian Video -->
-    <div class="flex flex-col w-full h-full">
-        <div class=" bg-color-8 p-8 border-[1px] border-color-4 rounded-2xl">\
-
-            <div class="flex items-center">
-                <img
-                    class="w-16 h-16 rounded-full mr-4"
-                    src="https://img.daisyui.com/images/stock/photo-1494232410401-ad00d5433cfa.webp"
-                    alt="Album" />
-                <div class="flex flex-col">
-                    <span class="text-xl text-color-1 font-semibold">Dr. Mirza</span>
-                    <span class="text-color-2 font-semibold">Author</span>
-                </div>
-            </div>
-            <div class="flex flex-col gap-4 pl-20">
-                <h1 class="text-3xl font-bold text-color-1">
-                    New Study Reveals Daily Weeks Can Significantly Improve Mental Health</h1>
-                <span class="text-color-2 text-center">
-                    23 September 2024
-                </span>
-                <iframe class="w-full aspect-video rounded-lg shadow-lg" src="https://www.youtube.com/embed/jwIWJIdpNFs?si=qeLaZN2hVmo1Pmey" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-
-        </div>
-    </div>
-
-    @else
-    <!-- Pesan Default Saat Tidak Ada Konten yang Dipilih -->
-    <div class="flex flex-col w-full h-full bg-color-8 p-8 border-[1px] border-color-4 rounded-2xl">
-        <div class="flex justify-center items-center w-full h-full">
-            Tidak ada konten yang dipilih.
-        </div>
-    </div>
-    @endif
-
+    <!-- End View konten edukatif -->
 @endsection

@@ -87,10 +87,10 @@ Route::middleware([RoleMiddleware::class . ':pasien'])->group(function () {
 // Tenaga Ahli
 Route::prefix('tenaga-ahli')->middleware(['auth', RoleMiddleware::class . ':tenaga ahli'])->group(function () {
     Route::get('/', [MainController::class, 'tenagaAhli']);
-    Route::get('/kelola-konten-edukatif', [KontenEdukatifController::class, 'tenagaAhliKontenEdukatif']);
-    Route::get('/kelola-konten-edukatif/artikel', [KontenEdukatifController::class, 'tenagaAhliKontenArtikel']);
-    Route::get('/kelola-konten-edukatif/video', [KontenEdukatifController::class, 'tenagaAhliKontenVideo']);
-    Route::get('/kelola-konten-edukatif/tambah-konten', [KontenEdukatifController::class, 'tenagaAhliCreate']);
+    Route::get('/kelola-konten-edukatif/{id?}', [KontenEdukatifController::class, 'tenagaAhliKontenEdukatif'])->name('kelola-konten-edukatif.index');
+    Route::get('/kelola-konten-edukatif/create/konten', [KontenEdukatifController::class, 'tenagaAhliCreate'])->name('kelola-konten-edukatif.create');
+    Route::get('/kelola-konten-edukatif/edit/konten{id}', [KontenEdukatifController::class, 'tenagaAhliEdit'])->name('kelola-konten-edukatif.edit');
+    Route::resource('/kelola-konten-edukatif', KontenEdukatifController::class)->only('store', 'destroy', 'update');
     Route::patch('/{id}/update-status', [TenagaAhliController::class, 'updateStatus'])->name('tenagaAhli.updateStatus');
     Route::get('/percakapan-konsultasi/{id?}', [KonsultasiController::class, 'tenagaAhliKonsultasi'])->name('tenagaAhliChat.index');
     Route::post('/percakapan-konsultasi/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');

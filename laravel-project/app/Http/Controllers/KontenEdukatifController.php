@@ -45,29 +45,26 @@ class KontenEdukatifController extends Controller
         ]);
     }
     
-    public function tenagaAhliKontenEdukatif($tipe = null)
+    public function tenagaAhliKontenEdukatif($id = null)
     {
+        $kontenList = KontenEdukatif::with(['user', 'kataKunci'])
+            ->where('id_user', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $selectedKonten = null;
+        if ($id) {
+            $selectedKonten = KontenEdukatif::with('user')
+                ->where('id_user', Auth::id())
+                ->find($id);
+        }
+
         return view('TenagaAhli/kelola_konten_edukatif', [
-            "title" => "Kelola Konten Edukatif",
-            'tipe' => null
+            'title' => 'Kelola Konten Edukatif',
+            'kontenList' => $kontenList,
+            'selectedKonten' => $selectedKonten,
         ]);
     }
-        
-    public function tenagaAhliKontenArtikel()
-    {
-        return view('TenagaAhli/kelola_konten_artikel', [
-            "title" => "Kelola Konten Artikel"
-        ]);
-    }
-    
-    public function tenagaAhliKontenVideo()
-    {
-        return view('TenagaAhli/kelola_konten_video', [
-            "title" => "Kelola Konten Video"
-        ]);
-    }
-
-
 
     /**
      * Display a listing of the resource.
@@ -87,14 +84,20 @@ class KontenEdukatifController extends Controller
     public function create()
     {
         return view('Admin/Form/tambah_data_konten_edukatif', [
-            "title" => "Tamabah Data Konten Edukatif"
+            "title" => "Tambah Data Konten Edukatif"
         ]);
     }
 
     public function tenagaAhliCreate()
     {
+        $kontenList = KontenEdukatif::with(['user', 'kataKunci'])
+            ->where('id_user', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('TenagaAhli/Form/tambah_data_konten_edukatif', [
-            "title" => "Tambah Konten Edukatif"
+            "title" => "Tambah Konten Edukatif",
+            'kontenList' => $kontenList,
         ]);
     }
 
@@ -151,6 +154,10 @@ class KontenEdukatifController extends Controller
             $perPage = 10;
             $lastPage = ceil($totalKontens / $perPage);
 
+            if (Auth::user()->tenagaAhli){
+                return redirect()->route('kelola-konten-edukatif.index', $kontenEdukatif->id)->with('success', 'Konten edukatif berhasil ditambahkan!');
+            };
+
             return redirect()->route('konten-edukatif.index', ['page' => $lastPage])
                             ->with('success', 'Konten edukatif berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -183,6 +190,32 @@ class KontenEdukatifController extends Controller
         return view('Admin/Form/edit_data_konten_edukatif', [
             "title" => "Kelola Konten Edukatif",
             "kontenEdukatif" => $kontenEdukatif,
+        ]);
+    }
+
+    public function tenagaAhliEdit(string $id)
+    {
+        $userId = Auth::id();
+
+        $kontenEdukatif = KontenEdukatif::with('user')
+            ->where('id', $id)
+            ->where('id_user', $userId)
+            ->first();
+
+        if (!$kontenEdukatif) {
+            return redirect()->back()->with('error', 'Konten tidak ditemukan atau Anda tidak memiliki akses untuk mengeditnya.');
+        }
+
+        
+        $kontenList = KontenEdukatif::with(['user', 'kataKunci'])
+            ->where('id_user', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('TenagaAhli/Form/edit_data_konten_edukatif', [
+            "title" => "Edit Konten Edukatif",
+            "kontenEdukatif" => $kontenEdukatif,
+            "kontenList" => $kontenList,
         ]);
     }
 
@@ -225,6 +258,10 @@ class KontenEdukatifController extends Controller
             $perPage = 10;
             $page = ceil($position / $perPage);
             
+            if (Auth::user()->tenagaAhli){
+                return redirect()->route('kelola-konten-edukatif.index', $id)->with('success', 'Konten edukatif berhasil ditambahkan!');
+            };
+
             return redirect()->route('konten-edukatif.index', ['page' => $page])
                             ->with('success', 'Data admin berhasil diubah!');
         } catch (\Exception $e) {
@@ -245,6 +282,10 @@ class KontenEdukatifController extends Controller
             }
 
             $kontenEdukatif->delete();
+
+            if (Auth::user()->tenagaAhli){
+                return redirect()->route('kelola-konten-edukatif.index')->with('success', 'Konten edukatif berhasil dihapus!');
+            };
 
             return redirect()->route('konten-edukatif.index')
                             ->with('success', 'Konten edukatif berhasil dihapus!');

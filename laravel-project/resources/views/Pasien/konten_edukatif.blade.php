@@ -252,7 +252,7 @@
                     <div class="flex flex-col gap-1.5 md:gap-2">
                         <h1 class="text-base md:text-2xl xl:text-3xl font-bold text-color-1 mt-4">{{ $selectedKonten->judul }}</h1>
                         <span class="text-color-2 text-sm md:text-base text-center">{{ \Carbon\Carbon::parse($item->created_at)->format('d F Y, H:i:s') }}</span>
-                        <img class="aspect-video rounded-2xl object-cover" src="{{ asset('storage/' . $selectedKonten->thumbnail) }}" alt="ilustrasi artikel">
+                        <img class="rounded-2xl object-cover" src="{{ asset('storage/' . $selectedKonten->thumbnail) }}" alt="ilustrasi artikel">
                         <p class="text-color-1 text-justify text-xs lg:text-base md:text-base">
                             {{ $selectedKonten->isi_artikel }}
                         </p>
