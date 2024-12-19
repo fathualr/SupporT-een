@@ -38,7 +38,7 @@
                             <th>
                                 <div class="avatar">
                                     <div class="w-9 rounded-full">
-                                        <img src="{{ asset('storage/' . $pasien->user->foto_profil) }}" />
+                                        <img src="{{ $pasien->user->foto_profil ? asset('storage/' . $pasien->user->foto_profil) : asset('images/dummy.png') }}" />
                                     </div>
                                 </div>
                             </th>

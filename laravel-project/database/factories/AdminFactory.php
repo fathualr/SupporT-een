@@ -13,7 +13,7 @@ class AdminFactory extends Factory
     public function definition()
     {
         return [
-            'id_user' => User::factory(), // Memastikan id_user sesuai dengan User yang di-factory
+            'id_user' => User::factory()->admin(), // Memastikan id_user sesuai dengan User yang di-factory
             'admin_role' => $this->faker->randomElement(['superadmin', 'content admin']),
         ];
     }

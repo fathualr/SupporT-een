@@ -45,7 +45,7 @@
                 <div class="flex items-center bg-color-putih border-[1px] border-color-4 px-4 py-2 rounded-2xl gap-2">
                     <div class="avatar">
                         <div class="w-[30px] rounded-full">
-                            <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" />
+                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('images/dummy.png') }}" />
                         </div>
                     </div>
                     <div class="flex flex-col">

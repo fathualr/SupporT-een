@@ -13,7 +13,7 @@ class PasienFactory extends Factory
     public function definition()
     {
         return [
-            'id_user' => User::factory(), // Memastikan id_user sesuai dengan User yang di-factory
+            'id_user' => User::factory()->pasien(), // Memastikan id_user sesuai dengan User yang di-factory
             'deskripsi_diri' => $this->faker->sentence(),
         ];
     }

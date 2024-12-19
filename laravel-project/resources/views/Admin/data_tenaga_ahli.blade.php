@@ -39,7 +39,7 @@
                             <th>
                                 <div class="avatar">
                                     <div class="w-9 rounded-full">
-                                        <img src="{{ asset('storage/' . $tenagaAhli->user->foto_profil) }}" />
+                                        <img src="{{ $tenagaAhli->user->foto_profil ? asset('storage/' . $tenagaAhli->user->foto_profil) : asset('images/dummy.png') }}" />
                                     </div>
                                 </div>
                             </th>

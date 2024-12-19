@@ -23,7 +23,7 @@ use App\Http\Controllers\{
     JurnalHarianController,
     AktivitasPribadiController,
     KonsultasiController,
-    TransaksiController,
+    TransaksiKonsultasiController,
     PendapatanController,
     AktivitasPositifController,
     KataKunciAktivitasController,
@@ -108,7 +108,8 @@ Route::prefix('super-admin')->middleware([RoleMiddleware::class . ':superadmin']
     Route::resource('/subscription', SubscriptionPlanController::class)->only('index', 'update');
     Route::resource('/subscription-user', SubscriptionController::class)->only('index');
     Route::resource('/subscription-transaction', TransaksiLanggananController::class)->only('index', 'show', 'destroy');
-    Route::resource('/transaksi', TransaksiController::class)->only('index');
+    Route::resource('/konsultasi', KonsultasiController::class)->only('index', 'show', 'destroy');
+    Route::resource('/transaksi', TransaksiKonsultasiController::class)->only('index', 'show', 'destroy');
     Route::resource('/model-chatbot', ChatbotController::class)->only('index');
     Route::post('/model-chatbot', [ChatbotController::class, 'updateChatbotLiteDataset'])->name('chatbotLite.updateDataset');
 });

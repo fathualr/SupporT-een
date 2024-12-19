@@ -25,4 +25,28 @@ class UserFactory extends Factory
             'updated_at' => now(),
         ];
     }
+
+    // State untuk role admin
+    public function admin()
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+        ]);
+    }
+
+    // State untuk role pasien
+    public function pasien()
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'pasien',
+        ]);
+    }
+
+    // State untuk role tenaga ahli
+    public function tenagaAhli()
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'tenaga ahli',
+        ]);
+    }
 }

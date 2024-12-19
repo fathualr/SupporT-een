@@ -45,7 +45,7 @@
                 <div class="flex items-center bg-color-putih border-[1px] border-color-4 px-4 py-2 rounded-2xl gap-2">
                     <div class="avatar">
                         <div class="w-[30px] rounded-full">
-                            <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" />
+                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('images/dummy.png') }}" />
                         </div>
                     </div>
                     <div class="flex flex-col">
@@ -64,34 +64,32 @@
                         <li>
                             <details id="dataPengguna">
                                 <summary>Data Pengguna</summary>
-                                <ul>
+                                <ul class="border-s-2 border-gray-200">
                                     <li><a href="/super-admin/user-admin">Data Administrator</a></li>
+                                    <li><a href="/super-admin/user-tenaga-ahli">Data Tenaga Ahli</a></li>
                                     <li><a href="/super-admin/user-pasien">Data Pasien</a></li>
-                                    {{-- <li><a href="/super-admin/user-tenaga-ahli">Data Tenaga Ahli</a></li> --}}
                                 </ul>
                             </details>
                         </li>
                         <li>
                             <details id="dataSubscription">
                                 <summary>Data Langganan</summary>
-                                <ul>
+                                <ul class="border-s-2 border-gray-200">
                                     <li><a href="/super-admin/subscription">Data Paket</a></li>
                                     <li><a href="/super-admin/subscription-user">Data Pengguna</a></li>
                                     <li><a href="/super-admin/subscription-transaction">Data Transaksi</a></li>
                                 </ul>
                             </details>
                         </li>
-                        {{-- <li>
+                        <li>
                             <details id="dataTransaksi">
-                                <summary>Data Transaksi</summary>
-                                <ul>
-                                    <li>
-                                    </li>
-                                    <li><a href="/super-admin/transaksi">Data Konsultasi</a></li>
+                                <summary>Data Konsultasi</summary>
+                                <ul class="border-s-2 border-gray-200">
+                                    <li><a href="/super-admin/konsultasi">Data Konsultasi</a></li>
+                                    <li><a href="/super-admin/transaksi">Data Transaksi</a></li>
                                 </ul>
                             </details>
-                        </li> --}}
-                        {{-- <li><a href="/super-admin/pendapatan">Pendapatan</a></li> --}}
+                        </li>
                         <div class="divider m-0"></div>
                         <li><a href="/super-admin/model-chatbot">Model Chatbot</a></li>
                     </ul>

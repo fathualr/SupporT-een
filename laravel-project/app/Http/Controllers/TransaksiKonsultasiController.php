@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TransaksiKonsultasi;
 use Illuminate\Http\Request;
 
-class TransaksiController extends Controller
+class TransaksiKonsultasiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('Admin/data_transaksi
-        ', [
-            "title" => "Data Transaksi"
+        $transaksi = TransaksiKonsultasi::orderBy('created_at', 'desc')->paginate(10);
+        return view('Admin/data_transaksi_konsultasi', [
+            "title" => "Data Transaksi Konsultasi",
+            "transaksi" => $transaksi
         ]);
     }
 
@@ -38,7 +40,11 @@ class TransaksiController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $transaksi = TransaksiKonsultasi::findOrFail($id);
+        return view('Admin/Template/data_transaksi_konsultasi', [
+            "title" => "Data Transaksi Konsultasi",
+            "transaksi" => $transaksi
+        ]);
     }
 
     /**
@@ -62,6 +68,13 @@ class TransaksiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $transaksi = TransaksiKonsultasi::findOrFail($id);
+        $transaksiDeleted = $transaksi->delete();
+
+        if ($transaksiDeleted) {
+            return redirect()->back()->with('success', 'Data transaksi konsultasi berhasil dihapus!');
+        } else {
+            return redirect()->back()->with('error', 'Data transaksi konsultasi gagal dihapus!');
+        }
     }
 }

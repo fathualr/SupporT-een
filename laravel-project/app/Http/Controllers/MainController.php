@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\AktivitasPositif;
 use App\Models\Diskusi;
+use App\Models\Konsultasi;
 use App\Models\KontenEdukatif;
 use App\Models\TenagaAhli;
 use App\Models\Pasien;
@@ -48,20 +49,24 @@ class MainController extends Controller
     {
         $totalPasien = Pasien::count();
         $totalAdmin = Admin::count();
-        // $totalTenagaAhli = TenagaAhli::count();
+        $totalTenagaAhli = TenagaAhli::count();
         $totalPelanggan = Subscription::where('ends_at', '>', Carbon::now())->count();
-        $totalTransaksi = TransaksiLangganan::count()
-        // + TransaksiKonsultasi::count()
-        ;
-        $totalAmountPaid = TransaksiLangganan::where('status', 'paid')->sum('amount');
+        $totalTransaksiLangganan = TransaksiLangganan::where('status', 'paid')->count();
+        $totalKonsultasi = Konsultasi::where('ends_at', '>', Carbon::now())->count();
+        $totalTransaksiKonsultasi = TransaksiKonsultasi::count();
+        $totalAmountPaidSubscription = TransaksiLangganan::where('status', 'paid')->sum('amount');
+        $totalAmountPaidConsultation = TransaksiKonsultasi::where('status', 'paid')->sum('amount') * 0.1;
+        $totalAmountPaid = $totalAmountPaidSubscription + $totalAmountPaidConsultation;
 
         return view('Admin/dashboard_super', [
             "title" => "Dashboard Super Admin",
             "totalPasien" => $totalPasien,
             "totalAdmin" => $totalAdmin,
-            // "totalTenagaAhli" => $totalTenagaAhli,
+            "totalTenagaAhli" => $totalTenagaAhli,
             "totalPelanggan" => $totalPelanggan,
-            "totalTransaksi" => $totalTransaksi,
+            "totalTransaksiLangganan" => $totalTransaksiLangganan,
+            "totalKonsultasi" => $totalKonsultasi,
+            "totalTransaksiKonsultasi" => $totalTransaksiKonsultasi,
             "totalAmountPaid" => 'Rp. ' . number_format($totalAmountPaid, 0, ',', '.'),
         ]);
     }

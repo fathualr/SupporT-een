@@ -13,7 +13,7 @@ class TenagaAhliFactory extends Factory
     public function definition()
     {
         return [
-            'id_user' => User::factory(), // Memastikan id_user sesuai dengan User yang di-factory
+            'id_user' => User::factory()->tenagaAhli(), // Memastikan id_user sesuai dengan User yang di-factory
             'nomor_str' => $this->faker->unique()->numerify('STR#####'),
             'spesialisasi' => 'Psikologi',
             'jadwal_aktif' => $this->faker->randomElement(['Senin-Jumat, 09:00-17:00', 'Senin-Kamis, 10:00-16:00']),

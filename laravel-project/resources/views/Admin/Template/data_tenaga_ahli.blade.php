@@ -40,10 +40,9 @@
 
         <label class="form-control w-full pt-5">
             <span class="label-text font-medium text-base pb-1">Foto Profil</span>
-            <input readonly value="{{ $tenagaAhli->user->foto_profil }}" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
             <!-- Preview -->
             <div class="w-full p-3">
-                <img src="{{ asset('storage/' . $tenagaAhli->user->foto_profil) }}" alt="Thumbnail Konten" class="w-32 h-32 object-cover rounded-lg" />
+                <img src="{{ $tenagaAhli->user->foto_profil ? asset('storage/' . $tenagaAhli->user->foto_profil) : asset('images/dummy.png') }}" alt="Thumbnail Konten" class="w-32 h-32 object-cover rounded-lg" />
             </div>
         </label>
 

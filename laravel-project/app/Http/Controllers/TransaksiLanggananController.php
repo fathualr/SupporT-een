@@ -42,7 +42,7 @@ class TransaksiLanggananController extends Controller
     {
         $transaksi = TransaksiLangganan::with('user')->findOrFail($id);
         return view('Admin/Template/data_transaksi_langganan', [
-            "title" => "Data Forum Diskusi",
+            "title" => "Data Transaksi Langganan",
             "transaksi" => $transaksi
         ]);
     }

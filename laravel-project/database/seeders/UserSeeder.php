@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'nama' => 'Admin 1',
             'jenis_kelamin' => 'laki laki',
             'tanggal_lahir' => '1980-01-01',
-            'foto_profil' => 'image/dummy.png',
+            'foto_profil' => null,
         ]);
 
         User::create([
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'nama' => 'Admin 2',
             'jenis_kelamin' => 'perempuan',
             'tanggal_lahir' => '1985-02-01',
-            'foto_profil' => 'image/dummy.png',
+            'foto_profil' => null,
         ]);
 
         // Membuat 1 pasien
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'nama' => 'Pasien A',
             'jenis_kelamin' => 'perempuan',
             'tanggal_lahir' => '1990-01-01',
-            'foto_profil' => 'image/dummy.png',
+            'foto_profil' => null,
         ]);
 
         // Membuat 1 tenaga ahli
@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             'nama' => 'Dr. Tenaga Ahli',
             'jenis_kelamin' => 'laki laki',
             'tanggal_lahir' => '1975-05-01',
-            'foto_profil' => 'image/dummy.png',
+            'foto_profil' => null,
         ]);
     }
 }

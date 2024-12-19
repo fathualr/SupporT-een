@@ -177,7 +177,11 @@ class KonsultasiController extends Controller
      */
     public function index()
     {
-        //
+        $konsultasi = Konsultasi::orderBy('created_at', 'desc')->paginate(10);
+        return view('Admin/data_konsultasi', [
+            "title" => "Data Konsultasi",
+            "konsultasi" => $konsultasi
+        ]);
     }
 
     /**
@@ -249,7 +253,11 @@ class KonsultasiController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $konsultasi = Konsultasi::findOrFail($id);
+        return view('Admin/Template/data_konsultasi', [
+            "title" => "Data Transaksi Konsultasi",
+            "konsultasi" => $konsultasi
+        ]);
     }
 
     /**
@@ -274,10 +282,16 @@ class KonsultasiController extends Controller
     public function destroy(string $id)
     {
         $konsultasi = Konsultasi::findOrFail($id);
-    
-        $konsultasi->pesanKonsultasi()->update(['is_showed_to_patient' => false]);
-    
-        return redirect()->route('chat.index')->with('success', 'Konsultasi berhasil diarsipkan dan pesan telah diperbarui.');
+
+        if(Auth::user()->role === 'pasien'){
+            $konsultasi->pesanKonsultasi()->update(['is_showed_to_patient' => false]);
+        
+            return redirect()->route('chat.index')->with('success', 'Konsultasi berhasil diarsipkan dan pesan telah dihapus.');
+        } else if (Auth::user()->role === 'admin'){
+            $konsultasi->delete();
+
+            return redirect()->back()->with('success', 'Data konsultasi berhasil dihapus!');
+        }
     }
     
 }
