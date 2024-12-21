@@ -95,7 +95,8 @@ Route::prefix('tenaga-ahli')->middleware(['auth', RoleMiddleware::class . ':tena
     Route::get('/percakapan-konsultasi/{id?}', [KonsultasiController::class, 'tenagaAhliKonsultasi'])->name('tenagaAhliChat.index');
     Route::post('/percakapan-konsultasi/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');
     Route::post('/percakapan-konsultasi/{id_konsultasi}/store', [KonsultasiController::class, 'storePesanHasilKonsultasi'])->name('percakapan-konsultasi.pesan');
-    Route::get('/pendapatan', [PendapatanController::class, 'tenagaAhliPendapatan']);
+    Route::get('/pendapatan', [PendapatanController::class, 'tenagaAhliPendapatan'])->name('pendapatanTenagaAhli.index');
+    Route::resource('/pendapatan', PendapatanController::class)->only('create', 'store');
 });
 
 // Admin
@@ -110,6 +111,7 @@ Route::prefix('super-admin')->middleware([RoleMiddleware::class . ':superadmin']
     Route::resource('/subscription-transaction', TransaksiLanggananController::class)->only('index', 'show', 'destroy');
     Route::resource('/konsultasi', KonsultasiController::class)->only('index', 'show', 'destroy');
     Route::resource('/transaksi', TransaksiKonsultasiController::class)->only('index', 'show', 'destroy');
+    Route::resource('/pendapatan', PendapatanController::class)->only('index','show', 'edit', 'update');
     Route::resource('/model-chatbot', ChatbotController::class)->only('index');
     Route::post('/model-chatbot', [ChatbotController::class, 'updateChatbotLiteDataset'])->name('chatbotLite.updateDataset');
 });

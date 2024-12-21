@@ -87,6 +87,7 @@
                                 <ul class="border-s-2 border-gray-200">
                                     <li><a href="/super-admin/konsultasi">Data Konsultasi</a></li>
                                     <li><a href="/super-admin/transaksi">Data Transaksi</a></li>
+                                    <li><a href="/super-admin/pendapatan">Data Penarikan Pendapatan</a></li>
                                 </ul>
                             </details>
                         </li>

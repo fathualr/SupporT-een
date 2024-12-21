@@ -238,6 +238,10 @@ class KonsultasiController extends Controller
                 'status' => 'paid',
                 'expired_at' => null,
             ]);
+
+            // Tambahkan logika untuk memperbarui tabungan tenaga ahli
+            $tabunganBaru = $tenagaAhli->tabungan + ($transaksi->amount * 0.9);
+            $tenagaAhli->update(['tabungan' => $tabunganBaru]);
     
             DB::commit();
     
