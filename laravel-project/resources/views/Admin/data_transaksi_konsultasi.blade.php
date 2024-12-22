@@ -16,7 +16,7 @@
                         <th>Pasien</th>
                         <th>Tenaga Ahli</th>
                         <th>Biaya Tenaga Ahli</th>
-                        <th>Metode Pembayaran</th>
+                        <th>Status</th>
                         <th>Biaya Admin</th>
                         <th>Tanggal</th>
                         <th class="text-center">Aksi</th>
@@ -30,7 +30,7 @@
                             <td>{{ $item->konsultasi->pasien->user->email ?? 'Unknown User' }}</td>
                             <td>{{ $item->konsultasi->tenagaAhli->user->email ?? 'Unknown User' }}</td>
                             <td>Rp. {{ number_format($item->amount * 0.9, 2) }}</td>
-                            <td>{{ $item->payment_method ?? 'Not Set' }}</td>
+                            <td>{{ $item->status }}</td>
                             <td>Rp. {{ number_format($item->amount * 0.1, 2) }}</td>
                             <td>{{ $item->created_at->format('d-m-Y H:i:s') ?? '-' }}</td>
                             <td class="flex justify-center gap-2">

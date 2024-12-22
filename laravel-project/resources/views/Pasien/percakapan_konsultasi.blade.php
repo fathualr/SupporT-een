@@ -9,7 +9,7 @@
 
     <h1 class="text-2xl xl:text-4xl font-bold text-color-1">Riwayat Konsultasi</h1>
 
-    <div class="w-full h-full  max-h-[calc(100vh-250px)] overflow-y-auto overflow-x-hidden">
+    <div class="w-full h-full overflow-x-hidden">
         @include('pasien.Components.riwayat_konsultasi')
     </div>
 

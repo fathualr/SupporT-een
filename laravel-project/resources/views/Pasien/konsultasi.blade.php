@@ -9,7 +9,7 @@
 
     <h1 class="text-2xl xl:text-4xl font-bold text-color-1">Riwayat Konsultasi</h1>
 
-    <div class="w-full h-full  max-h-[calc(100vh-250px)] overflow-y-auto overflow-x-hidden">
+    <div class="w-full h-full overflow-x-hidden">
         @include('pasien.Components.riwayat_konsultasi')
     </div>
 
@@ -80,13 +80,9 @@
                     <!-- Tombol -->
                     <div class="mt-4">
                         @if($selectedTenagaAhli->is_available)
-                            <form action="{{ route('konsultasi.store') }}" method="POST" onclick="event.stopPropagation();">
-                                @csrf
-                                <input type="hidden" name="id_tenaga_ahli" value="{{ $selectedTenagaAhli->id }}">
-                                <button type="submit" class="btn btn-lg bg-color-3 border-[1px] border-color-5 text-white w-full">
-                                    Chat Sekarang
-                                </button>
-                            </form>
+                            <a href="{{ route('pembayaran.konsultasi', $selectedTenagaAhli->id) }}" class="btn btn-lg bg-color-3 border-[1px] border-color-5 text-white w-full">
+                                Chat Sekarang
+                            </a>
                         @else
                             <button class="btn btn-lg cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">
                                 Offline
@@ -105,7 +101,7 @@
             <div class="grid grid-cols-2 gap-4 pb-8">
 
                 @foreach ($tenagaAhli as $ahli)
-                <a href="{{ route('konsultasi.index', $ahli->id) }}" class="card card-side h-[180px] card-compact bg-color-6 pl-5">
+                <button onclick="window.location.href='{{ route('konsultasi.index', $ahli->id) }}'" class="card card-side h-[180px] card-compact bg-color-6 pl-5">
                     <figure class="flex-none">
                         <img
                         class="w-[150px] h-[150px] rounded-2xl"
@@ -119,23 +115,19 @@
                             <p class="font-semibold text-color-1">Rp.{{ number_format($ahli->biaya_konsultasi, 0, ',', '.') }}</p>
 
                             @if($ahli->is_available)
-                                <form action="{{ route('konsultasi.store') }}" method="POST" onclick="event.stopPropagation();">
-                                    @csrf
-                                    <input type="hidden" name="id_tenaga_ahli" value="{{ $ahli->id }}">
-                                    <button type="submit" class="btn btn-sm bg-color-3 border-[1px] border-color-5 text-white w-full">
-                                        Chat
-                                    </button>
-                                </form>
+                                <a href="{{ route('pembayaran.konsultasi', $ahli->id) }}" class="btn btn-sm bg-color-3 border-[1px] border-color-5 text-white w-full">
+                                    Chat
+                                </a>
                             @else
-                                <button onclick="event.stopPropagation();" type="button" 
+                                <a onclick="event.stopPropagation();" type="button" 
                                         class="btn btn-sm cursor-not-allowed bg-color-4 border-[1px] border-color-5 text-white w-full">
                                     Offline
-                                </button>
+                                </a>
                             @endif
 
                         </div>
                     </div>
-                </a>
+                </button>
                 @endforeach
 
             </div>

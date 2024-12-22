@@ -32,7 +32,7 @@
                             <td>{{ $item->started_at ? $item->started_at->format('d-m-Y H:i:s') : '-' }}</td>
                             <td>{{ $item->ends_at ? $item->ends_at->format('d-m-Y H:i:s') : '-' }}</td>
                             <td class="flex justify-center gap-2">
-                                <a href="{{ route('konsultasi.show', $item->id) }}" class="btn bg-blue-100 text-blue-500 border-blue-500">
+                                <a href="{{ route('data-konsultasi.show', $item->id) }}" class="btn bg-blue-100 text-blue-500 border-blue-500">
                                     <img class="w-6 h-6" src="{{ asset('icons/Info.svg') }}" alt="Detail">
                                 </a>
                                 <button class="btn bg-red-100 text-red-500 border-red-500" onclick="confirmDeletion('{{ $item->id }}')">
@@ -41,7 +41,7 @@
                             </td>
                         </tr>
 
-                        <form id="delete-form-{{ $item->id }}" action="{{ route('konsultasi.destroy', $item->id) }}" method="POST" style="display: none;">
+                        <form id="delete-form-{{ $item->id }}" action="{{ route('data-konsultasi.destroy', $item->id) }}" method="POST" style="display: none;">
                             @csrf
                             @method('DELETE')
                         </form>

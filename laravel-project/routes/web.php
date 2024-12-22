@@ -77,11 +77,16 @@ Route::middleware([RoleMiddleware::class . ':pasien'])->group(function () {
             Route::resource('/balasan',BalasanController::class)->only(['store', 'destroy'])->names(['destroy' => 'pasien.balasan.destroy',]);;
             Route::resource('/gambar-diskusi', GambarDiskusiController::class)->only('destroy');
         });
+        Route::resource('/konsultasi', KonsultasiController::class)->only('store','destroy');
+        Route::get('/konsultasi/{id?}', [KonsultasiController::class, 'konsultasi'])->name('konsultasi.index');
+        Route::get('/konsultasi/pembayaran/{id}', [KonsultasiController::class, 'pasienPembayaran'])->name('pembayaran.konsultasi');
+        // Midtrans route ->
+        Route::post('/generate-snaptoken/generate', [KonsultasiController::class, 'generateSnapTokenKonsultasi'])->name('konsultasi.generate.snaptoken');
+        Route::post('/process-konsultasi-payment/{transactionId}', [KonsultasiController::class, 'processKonsultasiPayment'])->name('konsultasi.process.payment');
+        // <-
+        Route::get('/konsultasi/chat/{id_konsultasi}', [KonsultasiController::class, 'pasienKonsultasi'])->name('chat.index');
+        Route::post('/konsultasi/chat/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');
     });
-    Route::resource('/konsultasi', KonsultasiController::class)->only('store','destroy');
-    Route::get('/konsultasi/{id?}', [KonsultasiController::class, 'konsultasi'])->name('konsultasi.index');
-    Route::get('/konsultasi/chat/{id_konsultasi}', [KonsultasiController::class, 'pasienKonsultasi'])->name('chat.index');
-    Route::post('/konsultasi/chat/{id_konsultasi}/send', [KonsultasiController::class, 'sendMessage'])->name('chat.send');
 });
 
 // Tenaga Ahli
@@ -109,7 +114,7 @@ Route::prefix('super-admin')->middleware([RoleMiddleware::class . ':superadmin']
     Route::resource('/subscription', SubscriptionPlanController::class)->only('index', 'update');
     Route::resource('/subscription-user', SubscriptionController::class)->only('index');
     Route::resource('/subscription-transaction', TransaksiLanggananController::class)->only('index', 'show', 'destroy');
-    Route::resource('/konsultasi', KonsultasiController::class)->only('index', 'show', 'destroy');
+    Route::resource('/data-konsultasi', KonsultasiController::class)->only('index', 'show', 'destroy');
     Route::resource('/transaksi', TransaksiKonsultasiController::class)->only('index', 'show', 'destroy');
     Route::resource('/pendapatan', PendapatanController::class)->only('index','show', 'edit', 'update');
     Route::resource('/model-chatbot', ChatbotController::class)->only('index');

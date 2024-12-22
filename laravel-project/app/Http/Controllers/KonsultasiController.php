@@ -19,7 +19,7 @@ class KonsultasiController extends Controller
     
     public function konsultasi($id = null)
     {
-        $tenagaAhli = TenagaAhli::with('user')->orderBy('is_available','desc')->get();
+        $tenagaAhli = TenagaAhli::with('user')->orderBy('is_available', 'desc')->get();
         $selectedTenagaAhli = null;
 
         if ($id) {
@@ -27,21 +27,23 @@ class KonsultasiController extends Controller
                 ->where('id', $id)
                 ->first();
             if (!$selectedTenagaAhli) {
-                return redirect()->back()->with('error','Tenaga ahli tidak dapat ditemukan.');
+                return redirect()->back()->with('error', 'Tenaga ahli tidak dapat ditemukan.');
             }
         }
 
         $idPasien = Auth::user()->pasien->id;
-        
-        // Ambil semua riwayat konsultasi untuk pasien tersebut
+
+        // Ambil semua riwayat konsultasi untuk pasien tersebut dengan filter transaksi status = 'paid'
         $riwayatKonsultasi = Konsultasi::with(['pesanKonsultasi', 'tenagaAhli'])
             ->where('id_pasien', $idPasien)
+            ->whereHas('transaksiKonsultasi', function ($query) {
+                $query->where('status', 'paid');
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
         // Filter hanya konsultasi yang semua pesan is_showed_to_patient = true
         $riwayatKonsultasi = $riwayatKonsultasi->filter(function ($konsultasi) {
-            // Periksa apakah semua pesan pada konsultasi memiliki is_showed_to_patient = true
             return $konsultasi->pesanKonsultasi->every(function ($pesan) {
                 return $pesan->is_showed_to_patient == true;
             });
@@ -57,27 +59,95 @@ class KonsultasiController extends Controller
     
     public function pasienKonsultasi($id_konsultasi)
     {
-        // Ambil data user yang sedang login
         $idPasien = Auth::user()->pasien->id;
-    
-        // Ambil data konsultasi sesuai id yang sedang login
-        $konsultasi = Konsultasi::with(['pesanKonsultasi' => function($query) {
-                // Menambahkan kondisi untuk menampilkan hanya pesan yang is_showed_to_patient = true
+
+        $konsultasi = Konsultasi::with(['pesanKonsultasi' => function ($query) {
                 $query->where('is_showed_to_patient', true)
-                        ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at', 'desc');
             }])
             ->where('id', $id_konsultasi)
-            ->where('id_pasien', $idPasien) // Pastikan konsultasi milik pasien yang login
+            ->where('id_pasien', $idPasien)
+            ->whereHas('transaksiKonsultasi', function ($query) {
+                $query->where('status', 'paid');
+            })
             ->first();
-    
-        // Jika konsultasi tidak ditemukan atau bukan milik pasien yang login
+
         if (!$konsultasi) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses ke konsultasi ini.');
         }
+
+        $riwayatKonsultasi = Konsultasi::with(['pesanKonsultasi', 'tenagaAhli'])
+            ->where('id_pasien', $idPasien)
+            ->whereHas('transaksiKonsultasi', function ($query) {
+                $query->where('status', 'paid');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $riwayatKonsultasi = $riwayatKonsultasi->filter(function ($konsultasi) {
+            return $konsultasi->pesanKonsultasi->every(function ($pesan) {
+                return $pesan->is_showed_to_patient == true;
+            });
+        });
+
+        return view('Pasien/percakapan_konsultasi', [
+            "title" => "Percakapan",
+            "konsultasi" => $konsultasi,
+            "riwayatKonsultasi" => $riwayatKonsultasi,
+        ]);
+    }
+    
+    public function tenagaAhliKonsultasi($id = null)
+    {
+        $IdtenagaAhli = Auth::user()->tenagaAhli->id;
+
+        $riwayatKonsultasi = Konsultasi::with('pesanKonsultasi', 'pasien')
+            ->where('id_tenaga_ahli', $IdtenagaAhli)
+            ->whereHas('transaksiKonsultasi', function ($query) {
+                $query->where('status', 'paid');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($id) {
+            $konsultasi = Konsultasi::with(['pesanKonsultasi' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
+                ->where('id', $id)
+                ->where('id_tenaga_ahli', $IdtenagaAhli)
+                ->whereHas('transaksiKonsultasi', function ($query) {
+                    $query->where('status', 'paid');
+                })
+                ->first();
+
+            if (!$konsultasi) {
+                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke konsultasi ini.');
+            }
+        } else {
+            $konsultasi = null;
+        }
+
+        return view('TenagaAhli/percakapan_konsultasi', [
+            'title' => 'Percakapan',
+            'konsultasi' => $konsultasi,
+            'riwayatKonsultasi' => $riwayatKonsultasi,
+        ]);
+    }
+
+    public function pasienPembayaran($IdtenagaAhli){
+        $tenagaAhli = TenagaAhli::findOrFail($IdtenagaAhli);
+        if (!$tenagaAhli->is_available) {
+            // If the doctor is not available, return an error message or redirect
+            return redirect()->back()->with('error', 'Dokter ini sedang tidak tersedia untuk konsultasi.');
+        }
+        $idPasien = Auth::user()->pasien->id;
         
         // Ambil semua riwayat konsultasi untuk pasien tersebut
         $riwayatKonsultasi = Konsultasi::with(['pesanKonsultasi', 'tenagaAhli'])
             ->where('id_pasien', $idPasien)
+            ->whereHas('transaksiKonsultasi', function ($query) {
+                $query->where('status', 'paid');
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -88,48 +158,10 @@ class KonsultasiController extends Controller
                 return $pesan->is_showed_to_patient == true;
             });
         });
-    
-        return view('Pasien/percakapan_konsultasi', [
-            "title" => "Percakapan",
-            "konsultasi" => $konsultasi,
-            "riwayatKonsultasi" => $riwayatKonsultasi,
-        ]);
-    }
-    
-    public function tenagaAhliKonsultasi($id = null)
-    {
-        // Cek apakah user adalah tenaga ahli
-        $IdtenagaAhli = Auth::user()->tenagaAhli->id;
-        
-        // Ambil riwayat konsultasi yang ada untuk tenaga ahli
-        $riwayatKonsultasi = Konsultasi::with('pesanKonsultasi', 'pasien')
-            ->where('id_tenaga_ahli', $IdtenagaAhli)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        
-        // Jika ada id, ambil konsultasi tersebut
-        if ($id) {
-            // Ambil data konsultasi tertentu berdasarkan id
-            $konsultasi = Konsultasi::with(['pesanKonsultasi' => function($query) {
-                $query->orderBy('created_at', 'desc');
-            }])
-            ->where('id', $id)
-            ->where('id_tenaga_ahli', $IdtenagaAhli) // Pastikan konsultasi milik tenaga ahli yang login
-            ->first();
-            
-            // Jika konsultasi tidak ditemukan atau bukan milik tenaga ahli yang login
-            if (!$konsultasi) {
-                return redirect()->back()->with('error', 'Anda tidak memiliki akses ke konsultasi ini.');
-            }
-        } else {
-            // Jika tidak ada id, kita set konsultasi menjadi null
-            $konsultasi = null;
-        }
-    
-        // Return halaman percakapan dengan data konsultasi dan riwayat
-        return view('TenagaAhli/percakapan_konsultasi', [
-            'title' => 'Percakapan',
-            'konsultasi' => $konsultasi,
+
+        return view('Pasien/pembayaran_konsultasi', [
+            'title' => 'Pembayaran Konsultasi',
+            'tenagaAhli' => $tenagaAhli,
             'riwayatKonsultasi' => $riwayatKonsultasi,
         ]);
     }
@@ -177,7 +209,12 @@ class KonsultasiController extends Controller
      */
     public function index()
     {
-        $konsultasi = Konsultasi::orderBy('created_at', 'desc')->paginate(10);
+        $konsultasi = Konsultasi::whereHas('transaksiKonsultasi', function ($query) {
+            $query->where('status', 'paid');
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
         return view('Admin/data_konsultasi', [
             "title" => "Data Konsultasi",
             "konsultasi" => $konsultasi
@@ -197,59 +234,7 @@ class KonsultasiController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'id_tenaga_ahli' => 'required|exists:tenaga_ahli,id',
-        ]);
-    
-        $user = Auth::user();
-        $idPasien = $user->pasien->id;
-    
-        $tenagaAhli = TenagaAhli::find($request->id_tenaga_ahli);
-    
-        if (!$tenagaAhli->is_available) {
-            return redirect()->back()->with('error', 'Tenaga ahli tidak tersedia saat ini. Silakan coba lagi nanti.');
-        }
-    
-        $ongoingKonsultasi = Konsultasi::where('id_pasien', $idPasien)
-            ->where('status', 'on going')
-            ->exists();
-    
-        if ($ongoingKonsultasi) {
-            return redirect()->back()->with('error', 'Anda masih memiliki konsultasi yang sedang berjalan.');
-        }
-    
-        try {
-            DB::beginTransaction();
-    
-            $konsultasi = Konsultasi::create([
-                'id_tenaga_ahli' => $tenagaAhli->id,
-                'id_pasien' => $idPasien,
-                'status' => 'on going',
-                'started_at' => now(),
-                'ends_at' => now()->addMinutes(30)->addSeconds(30),
-            ]);
-    
-            $tenagaAhli->update(['is_available' => false]);
-    
-            $transaksi = TransaksiKonsultasi::create([
-                'id_konsultasi' => $konsultasi->id,
-                'snap_token' => Str::uuid(), // Membuat token unik sementara, nanti digantikan dengan Snap Midtrans
-                'amount' => $tenagaAhli->biaya_konsultasi,
-                'status' => 'paid',
-                'expired_at' => null,
-            ]);
-
-            // Tambahkan logika untuk memperbarui tabungan tenaga ahli
-            $tabunganBaru = $tenagaAhli->tabungan + ($transaksi->amount * 0.9);
-            $tenagaAhli->update(['tabungan' => $tabunganBaru]);
-    
-            DB::commit();
-    
-            return redirect()->route('chat.index', $konsultasi->id)->with('success', 'Konsultasi berhasil dibuat');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat konsultasi. Silakan coba lagi.');
-        }
+        //
     }    
 
     /**
@@ -285,17 +270,151 @@ class KonsultasiController extends Controller
      */
     public function destroy(string $id)
     {
-        $konsultasi = Konsultasi::findOrFail($id);
+        $konsultasi = Konsultasi::with('pesanKonsultasi')->findOrFail($id);
 
         if(Auth::user()->role === 'pasien'){
-            $konsultasi->pesanKonsultasi()->update(['is_showed_to_patient' => false]);
-        
-            return redirect()->route('chat.index')->with('success', 'Konsultasi berhasil diarsipkan dan pesan telah dihapus.');
+            if ($konsultasi->pesanKonsultasi->isEmpty()) {
+                // Hapus konsultasi jika tidak memiliki pesan
+                $konsultasi->delete();
+                return redirect()->route('konsultasi.index')->with('success', 'Konsultasi berhasil dihapus karena tidak memiliki pesan.');
+            } else {
+                // Jika ada pesan, ubah is_showed_to_patient menjadi false
+                $konsultasi->pesanKonsultasi()->update(['is_showed_to_patient' => false]);
+                return redirect()->route('konsultasi.index')->with('success', 'Konsultasi berhasil diarsipkan dan pesan telah dihapus.');
+            }
         } else if (Auth::user()->role === 'admin'){
             $konsultasi->delete();
 
             return redirect()->back()->with('success', 'Data konsultasi berhasil dihapus!');
         }
     }
-    
+    //------------------------------------------
+
+    public function generateSnapTokenKonsultasi(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $idPasien = $user->pasien->id;
+            $tenagaAhli = TenagaAhli::findOrFail($request->id_tenaga_ahli);
+
+            if (!$tenagaAhli->is_available) {
+                return response()->json([
+                    'error' => 'Tenaga ahli tidak tersedia saat ini.'
+                ], 400);
+            }
+
+            $ongoingKonsultasi = Konsultasi::where('id_pasien', $idPasien)
+                ->where('status', 'on going')
+                ->exists();
+
+            if ($ongoingKonsultasi) {
+                return response()->json([
+                    'error' => 'Anda masih memiliki konsultasi yang sedang berjalan.'
+                ], 400);
+            }
+
+            Config::$serverKey = config('midtrans.serverKey');
+            Config::$isProduction = false;
+            Config::$isSanitized = true;
+            Config::$is3ds = true;
+
+            DB::beginTransaction();
+
+            $konsultasi = Konsultasi::create([
+                'id_tenaga_ahli' => $tenagaAhli->id,
+                'id_pasien' => $idPasien,
+                'status' => null,
+                'started_at' => null,
+                'ends_at' => null,
+            ]);
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'KONS-' . $konsultasi->id,
+                    'gross_amount' => $tenagaAhli->biaya_konsultasi,
+                ],
+                'customer_details' => [
+                    'first_name' => $user->nama,
+                    'email' => $user->email,
+                ],
+            ];
+
+            $snapToken = Snap::getSnapToken($params);
+
+            $transaksi = TransaksiKonsultasi::create([
+                'id_konsultasi' => $konsultasi->id,
+                'snap_token' => $snapToken,
+                'amount' => $tenagaAhli->biaya_konsultasi,
+                'status' => 'pending',
+                'expired_at' => now()->addMinutes(20),
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'snap_token' => $snapToken,
+                'transaction_id' => $transaksi->id,
+                'konsultasi_id' => $konsultasi->id,
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Terjadi kesalahan server.'], 500);
+        }
+    }
+
+    public function processKonsultasiPayment(Request $request, $transactionId)
+    {
+        try {
+            $transaksi = TransaksiKonsultasi::with('konsultasi')->findOrFail($transactionId);
+            $paymentResult = $request->input('payment_result');
+
+            DB::beginTransaction();
+
+            if ($paymentResult['status_code'] == 200) {
+                // Update status transaksi
+                $transaksi->update([
+                    'payment_method' => $paymentResult['payment_type'],
+                    'status' => 'paid',
+                    'expired_at' => null,
+                ]);
+
+                // Update konsultasi
+                $konsultasi = $transaksi->konsultasi;
+                $konsultasi->update([
+                    'status' => 'on going',
+                    'started_at' => now(),
+                    'ends_at' => now()->addMinutes(30)->addSeconds(30),
+                ]);
+
+                // Update status tenaga ahli
+                TenagaAhli::where('id', $konsultasi->id_tenaga_ahli)
+                    ->update(['is_available' => false]);
+
+                // Update tabungan tenaga ahli (90% dari biaya konsultasi)
+                $tenagaAhli = TenagaAhli::find($konsultasi->id_tenaga_ahli);
+                $tenagaAhli->increment('tabungan', $transaksi->amount * 0.9);
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'konsultasi_id' => $konsultasi->id
+                ]);
+            }
+
+            DB::rollBack();
+            return response()->json([
+                'success' => false, 
+                'message' => 'Pembayaran gagal.'
+            ], 400);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false, 
+                'message' => 'Kesalahan server.'
+            ], 500);
+        }
+    }
 }
