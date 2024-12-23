@@ -17,7 +17,7 @@ class SubscriptionPLanSeeder extends Seeder
             [
                 'name' => 'Paket Langganan Premium',
                 'price' => 100000.00,
-                'duration' => 30, // 30 hari
+                'duration' => 30,
             ],
         ]);
     }

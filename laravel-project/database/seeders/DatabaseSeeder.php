@@ -21,14 +21,10 @@ class DatabaseSeeder extends Seeder
             TenagaAhliSeeder::class,
             RiwayatPendidikanTenagaAhliSeeder::class,
             PasienSeeder::class,
-            SubscriptionPLanSeeder::class,
-            AktivitasPositifSeeder::class,
-            KataKunciAktivitasPositifSeeder::class,
-            KontenEdukatifSeeder::class,
-            KataKunciKontenSeeder::class,
             DiskusiSeeder::class,
-            GambarDiskusiSeeder::class,
-            BalasanSeeder::class,
+            AktivitasPositifSeeder::class,
+            KontenEdukatifSeeder::class,
+            SubscriptionPLanSeeder::class,
         ]);
     }
 }

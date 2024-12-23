@@ -15,16 +15,25 @@ class TenagaAhliSeeder extends Seeder
     public function run()
     {
         TenagaAhli::create([
-            'id' => 1, // ID untuk tenaga ahli pertama
-            'id_user' => 4, // ID pengguna tenaga ahli pertama
+            'id' => 1,
+            'id_user' => 3,
             'nomor_str' => 'STR12345',
             'spesialisasi' => 'Psikologi',
             'jadwal_aktif' => 'Senin-Jumat, 08:00-17:00',
             'lokasi_praktik' => 'Klinik Psikologi ABC',
-            'biaya_konsultasi' => 500000,
+            'biaya_konsultasi' => 100000,
             'tabungan' => 0.00,
         ]);
-        
-        TenagaAhli::factory()->count(15)->create(); // Menggunakan factory untuk Tenaga Ahli
+
+        TenagaAhli::create([
+            'id' => 2,
+            'id_user' => 4,
+            'nomor_str' => 'STR12346',
+            'spesialisasi' => 'Psikiater',
+            'jadwal_aktif' => 'Senin-Jumat, 18:00-20:00',
+            'lokasi_praktik' => 'Klinik Psikologi DEF',
+            'biaya_konsultasi' => 150000,
+            'tabungan' => 0.00,
+        ]);
     }
 }
