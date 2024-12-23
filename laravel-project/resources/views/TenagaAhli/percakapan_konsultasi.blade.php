@@ -240,6 +240,41 @@
         const timerElement = document.getElementById('timer');
         const konsultasiId = '{{ $konsultasi->id }}';
         
+        window.Echo.channel(`chat.${konsultasiId}`)
+            .listen('.message.sent', (data) => {
+                console.log('Pesan baru diterima:', data); // Debug: pastikan data muncul di console
+                appendMessageTenagaAhli(data, data.pengirim);
+            });
+
+        // Update fungsi appendMessage untuk menggunakan data dari Pusher
+        function appendMessageTenagaAhli(message, sender) {
+            console.log('Menambahkan pesan:', message, 'Dari pengirim:', sender);
+
+            const isTenagaAhli = sender === 'tenaga ahli';
+            const avatarUrl = isTenagaAhli 
+                ? message.tenagaAhliFotoProfil
+                : message.pasienFotoProfil;
+
+            const messageHTML = `
+                <div class="flex items-end gap-3 pb-4">
+                    ${isTenagaAhli ? '' : `<div class="avatar">
+                        <div class="w-12 rounded-full">
+                            <img src="${avatarUrl}" alt="Profil" />
+                        </div>
+                    </div>`}
+                    <div class="chat-bubble ${isTenagaAhli ? 'bg-color-3 text-white' : 'bg-white text-color-1 border'} w-full">
+                        ${message.pesan}
+                    </div>
+                    ${isTenagaAhli ? `<div class="avatar">
+                        <div class="w-12 rounded-full">
+                            <img src="${avatarUrl}" alt="Profil" />
+                        </div>
+                    </div>` : ''} 
+                </div>
+            `;
+            chatMessages.insertAdjacentHTML('afterbegin', messageHTML);
+        }
+
         // Timer settings
         const startTime = new Date('{{ $konsultasi->started_at }}').getTime();
         const endTime = new Date('{{ $konsultasi->ends_at }}').getTime();
@@ -278,35 +313,6 @@
             messageInput.placeholder = 'Ketik pesan...';
         }
 
-        // Append new message
-        function appendMessage(message, sender) {
-            const isTenagaAhli = sender === 'tenaga ahli';
-
-            // Avatar URL setup
-            const avatarUrl = isTenagaAhli 
-                ? (message.tenagaAhliFotoProfil || '/images/dummy.png')
-                : (message.pasienFotoProfil || '/images/dummy.png');
-
-            const messageHTML = `
-                <div class="flex items-end gap-3 pb-4">
-                    ${isTenagaAhli ? '' : `<div class="avatar">
-                        <div class="w-12 rounded-full">
-                            <img src="${avatarUrl}" alt="Profil" />
-                        </div>
-                    </div>`}
-                    <div class="chat-bubble ${isTenagaAhli ? 'bg-color-3 text-white' : 'bg-white text-color-1 border'} w-full">
-                        ${message.pesan}
-                    </div>
-                    ${isTenagaAhli ? `<div class="avatar">
-                        <div class="w-12 rounded-full">
-                            <img src="${avatarUrl}" alt="Profil" />
-                        </div>
-                    </div>` : ''} 
-                </div>
-            `;
-            chatMessages.insertAdjacentHTML('afterbegin', messageHTML);
-        }
-
         // Send Message Function
         async function sendMessage() {
             const messageText = messageInput.value.trim();
@@ -333,7 +339,6 @@
                 }
 
                 const newMessage = await response.json();
-                appendMessage(newMessage, 'tenaga ahli');
                 messageInput.value = ''; // Kosongkan input setelah terkirim
             } catch (error) {
                 alert(error.message || 'Terjadi kesalahan saat mengirim pesan.');

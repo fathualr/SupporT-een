@@ -33,6 +33,9 @@ use App\Http\Controllers\{
     SubscriptionPlanController,
     TransaksiLanggananController,
 };
+use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::routes(['middleware' => ['web', 'auth']]);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');

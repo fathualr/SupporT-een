@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewChatMessage;
 use App\Models\Konsultasi;
 use App\Models\TransaksiKonsultasi;
 use App\Models\TenagaAhli;
@@ -179,7 +180,7 @@ class KonsultasiController extends Controller
             'pengirim' => $request->pengirim,
             'is_showed_to_patient' => true
         ]);
-
+        broadcast(new NewChatMessage($message))->toOthers();
         return response()->json($message);
     }
 
