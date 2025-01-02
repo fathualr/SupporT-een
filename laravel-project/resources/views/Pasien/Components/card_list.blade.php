@@ -3,7 +3,7 @@
         <!-- Gambar -->
         <div class="flex-none w-16 h-16">
             <img class="w-full h-full rounded-xl" 
-                src="{{ $diskusi->gambarDiskusi->first() ? asset('storage/' . $diskusi->gambarDiskusi->first()->gambar) : asset('storage/image/dummy.png') }}" 
+                src="{{ $diskusi->gambarDiskusi->first() ? asset('storage/' . $diskusi->gambarDiskusi->first()->gambar) : asset('images/dummy.png') }}" 
                 alt="Gambar Diskusi">
         </div>
         <!-- Isi Diskusi -->

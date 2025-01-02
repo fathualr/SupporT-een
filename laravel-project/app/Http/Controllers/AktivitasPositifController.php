@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AktivitasPositifRequest;
 use App\Models\AktivitasPositif;
 use App\Models\AktivitasPribadi;
-use App\Models\KataKunciAktivitasPositif;
 use App\Models\RiwayatAktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +46,7 @@ class AktivitasPositifController extends Controller
      */
     public function index()
     {
-        $aktivitasPositif = AktivitasPositif::with('kataKunci')->paginate(10);
+        $aktivitasPositif = AktivitasPositif::paginate(10);
         return view('Admin/data_aktivitas_positif', [
             "title" => "Data Aktivitas Positif",
             "aktivitasPositif" => $aktivitasPositif
@@ -83,22 +82,6 @@ class AktivitasPositifController extends Controller
 
             $aktivitasPositif = AktivitasPositif::create($aktivitasData);
 
-            if ($request->has('kata_kunci') && !empty($request->input('kata_kunci'))) {
-                $kataKunci = explode(',', $request->input('kata_kunci'));
-
-                $kataKunci = array_filter($kataKunci, function ($kata) {
-                    return !empty(trim($kata));
-                });
-
-                if (!empty($kataKunci)) {
-                    $kataKunciData = [];
-                    foreach ($kataKunci as $kata) {
-                        $kataKunciData[] = ['id_aktivitas' => $aktivitasPositif->id, 'nama' => trim($kata)];
-                    }
-                    KataKunciAktivitasPositif::insert($kataKunciData);
-                }
-            }
-
             DB::commit();
             $totalAktivitas = AktivitasPositif::count();
             $perPage = 10;
@@ -124,7 +107,7 @@ class AktivitasPositifController extends Controller
      */
     public function show(string $id)
     {
-        $aktivitasPositif = AktivitasPositif::with('kataKunci')->findOrFail($id);
+        $aktivitasPositif = AktivitasPositif::findOrFail($id);
         return view('Admin/Template/data_daftar_aktivitas_positif', [
             "title" => "Data Aktivitas Positif",
             "aktivitasPositif" => $aktivitasPositif
@@ -136,7 +119,7 @@ class AktivitasPositifController extends Controller
      */
     public function edit(string $id)
     {
-        $aktivitasPositif = AktivitasPositif::with('kataKunci')->findOrFail($id);
+        $aktivitasPositif = AktivitasPositif::findOrFail($id);
         return view('Admin/Form/edit_data_aktivitas', [
             "title" => "Data Aktivitas Positif",
             "aktivitasPositif" => $aktivitasPositif

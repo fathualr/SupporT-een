@@ -210,7 +210,7 @@
                             </div>
                             <div class="avatar">
                                 <div class="w-12 rounded-full">
-                                    <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('storage/image/dummy.png') }}" />
+                                    <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('images/dummy.png') }}" />
                                 </div>
                             </div>
                         @endif

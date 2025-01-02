@@ -14,7 +14,7 @@ app()->singleton(Schedule::class, function () {
 
     $schedule->command('transactions:expire')->everyMinute();
     $schedule->command('consultations:finish')->everyMinute();
-    $schedule->command('activities:record')->dailyAt('23:59');
+    $schedule->command('activities:record')->dailyAt('23:01');
 
     return $schedule;
 });

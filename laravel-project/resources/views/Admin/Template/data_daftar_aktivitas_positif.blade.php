@@ -28,12 +28,6 @@
             </div>
         </label>
 
-        <!-- Kata Kunci -->
-        <label class="form-control w-full pt-5">
-            <span class="label-text font-medium text-base pb-1">Kata Kunci</span>
-            <input readonly value="{{ $aktivitasPositif->kataKunci->pluck('nama')->implode(', ') }}" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
-        </label>
-
     </div>
 </div>
 @endsection

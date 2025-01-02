@@ -59,7 +59,7 @@
 
             <label class="form-control w-full mt-5">
                 <span class="label-text font-medium text-base pb-1">Tanggal Lahir</span>
-                <input type="date" name="tanggal_lahir" value="{{ $tenagaAhli->user->tanggal_lahir }}" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
+                <input type="date" name="tanggal_lahir" value="{{ $tenagaAhli->user->tanggal_lahir->format('Y-m-d') }}" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
             </label>
             @error('tanggal_lahir')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>

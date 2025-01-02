@@ -39,16 +39,6 @@
             @enderror
             <!-- gambar -->
 
-            <!-- kata kunci -->
-            <label class="form-control w-full">
-                <span class="label-text font-medium text-base pb-1">Kata Kunci</span>
-                <input type="text" name="kata_kunci" placeholder="Kata kunci" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
-            </label>
-            @error('kata_kunci')
-                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-            @enderror
-            <!-- kata kunci -->
-
             <!-- tombol tambah -->
             <label class="flex justify-center items-center pt-5">
                 <button type="submit" class="btn bg-color-3 text-white w-48">Tambah</button>
