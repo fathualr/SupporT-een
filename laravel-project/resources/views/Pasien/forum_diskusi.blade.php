@@ -111,7 +111,7 @@
                     <div class="flex items-center">
                         <!-- profile -->
                         <img class="size-12 rounded-full mr-4" 
-                            src="{{ $selectedDiskusi->pasien->profile_picture ?? asset('storage/image/dummy.png') }}" 
+                            src="{{ $selectedDiskusi->pasien->user->foto_profil ? asset('storage/' . $selectedDiskusi->pasien->user->foto_profil) : asset('images/dummy.png') }}" 
                             alt="Profil " />
                         <div class="flex flex-col">
                             <span class="text-base text-color-1 font-semibold">{{ $selectedDiskusi->pasien ? $selectedDiskusi->pasien->user->nama : '#DeletedUser' }}</span>
@@ -202,7 +202,7 @@
                             <div class="flex items-center">
                                 <!-- Gambar profil pasien -->
                                 <img class="size-12 rounded-full mr-4" 
-                                    src="{{ $diskusi->pasien->profile_picture ?? asset('storage/image/dummy.png') }}" 
+                                    src="{{ $diskusi->pasien?->user?->foto_profil ? asset('storage/' . $diskusi->pasien->user->foto_profil) : asset('images/dummy.png') }}"
                                     alt="Profil" />
                                 <div class="flex flex-col">
                                     <!-- Nama pasien -->

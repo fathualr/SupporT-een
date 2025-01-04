@@ -45,49 +45,6 @@
             <!-- tombol simpan -->
 
         </form>
-        <div class="divider"></div>
-
-        <!-- daftar kata kunci yang sudah ada -->
-        <label class="form-control w-full pt-5">
-            <span class="label-text font-medium text-base pb-1">Kata Kunci</span>
-
-            <!-- Loop untuk menampilkan setiap kata kunci yang sudah ada -->
-            @foreach ($aktivitasPositif->kataKunci as $key => $kataKunci)
-                <div class="flex gap-x-3">
-                    <input readonly value="{{ $kataKunci->nama }}" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg mb-5" />
-                    <!-- Form untuk menghapus kata kunci -->
-                    <form action="{{ route('kata-kunci-aktivitas.destroy', $kataKunci->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit" class="btn bg-red-100 text-red-500 border-red-500">
-                            <img class="w-6 h-6" src="{{ asset('icons/Waste.svg') }}" alt="Delete">
-                        </button>
-
-                    </form>
-                </div>
-            @endforeach
-            
-            <!-- Form untuk menambahkan kata kunci baru -->
-            <form action="{{ route('kata-kunci-aktivitas.store') }}" method="POST">
-                @csrf
-                @method('POST')
-                
-                <label class="form-control w-full pt-5">
-                    <input type="hidden" name="id_aktivitas" value="{{ $aktivitasPositif->id }}">
-                    <input type="text" name="kata_kunci" placeholder="Masukkan kata kunci baru" class="input input-bordered input-md w-full outline outline-1 outline-color-5 bg-color-6 rounded-lg" />
-                </label>
-                @error('kata_kunci')
-                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                @enderror
-                
-                <!-- Tombol untuk menambahkan kata kunci -->
-                <div class="flex justify-center items-center mt-5">
-                    <button type="submit" class="btn bg-color-3 text-white w-48">Tambah</button>
-                </div>
-            </form>
-            
-        </label>
     </div>
 </div>
 

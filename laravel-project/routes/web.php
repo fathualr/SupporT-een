@@ -132,7 +132,6 @@ Route::prefix('content-admin')->middleware([RoleMiddleware::class . ':content ad
     Route::get('/diskusi/{id}/balasan', [DiskusiController::class, 'showBalasan'])->name('diskusi.showBalasan');
     Route::resource('/balasan',BalasanController::class)->only('destroy');
     Route::resource('/aktivitas-positif',AktivitasPositifController::class);
-    Route::resource('/kata-kunci-aktivitas',KataKunciAktivitasController::class)->only('store', 'destroy');
 });
 
 Route::fallback(function () {

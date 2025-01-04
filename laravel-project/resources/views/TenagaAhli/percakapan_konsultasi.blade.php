@@ -49,7 +49,7 @@
                     <div class="flex-none w-16 h-16">
                         <img
                             class="w-full h-full rounded-xl"
-                            src="{{ $riwayat->pasien->user->foto_profil ? asset($riwayat->tenagaAhli->user->foto_profil) : asset('images/dummy.png') }}"
+                            src="{{ $riwayat->pasien->user->foto_profil ? asset('storage/'.$riwayat->pasien->user->foto_profil) : asset('images/dummy.png') }}"
                             alt="Profile Picture" />
                     </div>
                     <div class="flex-1 justify-between">

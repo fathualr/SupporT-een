@@ -6,6 +6,7 @@ use App\Http\Requests\PenarikanSaldoRequest;
 use App\Models\PenarikanSaldo;
 use App\Models\TenagaAhli;
 use App\Models\TransaksiKonsultasi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -174,7 +175,9 @@ class PendapatanController extends Controller
 
             // Jika statusnya "ditolak", kita mengembalikan nilai yang dikurangi di tabungan
             if ($penarikan->status === 'ditolak') {
-                $tenagaAhli = TenagaAhli::find($penarikan->tenaga_ahli_id);
+                $user = User::findOrFail($penarikan->id_user);
+                // Lalu ambil data tenaga ahli melalui relasi
+                $tenagaAhli = $user->tenagaAhli;
                 if ($tenagaAhli) {
                     // Kembalikan nilai yang dikurangi dari tabungan tenaga ahli
                     $tenagaAhli->tabungan += $penarikan->jumlah_penarikan;

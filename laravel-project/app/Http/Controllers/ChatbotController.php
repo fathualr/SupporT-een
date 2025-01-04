@@ -187,34 +187,20 @@ class ChatbotController extends Controller
             $user = User::findOrFail($id);
             $isPremium = $user->isPremium();
             $messageLimit = $user->pasien->getNonPremiumLimit();
-
-            // Jika pengguna non-premium dan telah mencapai batas
+            
             if (!$isPremium && $messageLimit >= 10) {
                 $response = Http::withHeaders([
-                    'Authorization' => 'Bearer CzRtBScIsvFa1iELRBCsBBoSynlWbjDptWY5xDwboEZ6mYJbOZFG4PafN6QdA8eI',
-                ])->post('http://127.0.0.1:9999/chatbot-lite', [
+                    'Authorization' => 'Bearer ' . env('FLASK_API_KEY'),
+                ])->post(env('FLASK_SERVICE_URL'). '/chatbot-lite', [
                     'pesan_baru' => $pesan,
                 ]);
             } else {
                 $response = Http::withHeaders([
-                    'Authorization' => 'Bearer CzRtBScIsvFa1iELRBCsBBoSynlWbjDptWY5xDwboEZ6mYJbOZFG4PafN6QdA8eI',
-                ])->post('http://127.0.0.1:9999/chatbot', [
+                    'Authorization' => 'Bearer ' . env('FLASK_API_KEY'),
+                ])->post(env('FLASK_SERVICE_URL'). '/chatbot', [
                     'pesan_baru' => $pesan,
                 ]);
             }
-            // if (!$isPremium && $messageLimit >= 10) {
-            //     $response = Http::withHeaders([
-            //         'Authorization' => 'Bearer ' . env('FLASK_API_KEY'),
-            //     ])->post(env('FLASK_SERVICE_URL') . '/chatbot-lite', [
-            //         'pesan_baru' => $pesan,
-            //     ]);
-            // } else {
-            //     $response = Http::withHeaders([
-            //         'Authorization' => 'Bearer ' . env('FLASK_API_KEY'),
-            //     ])->post(env('FLASK_SERVICE_URL') . '/chatbot', [
-            //         'pesan_baru' => $pesan,
-            //     ]);
-            // }
     
             if ($response->successful()) {
                 $botResponse = $response->json('chatbot_response');
